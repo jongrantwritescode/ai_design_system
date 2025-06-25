@@ -3,197 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Design System - Web Components Demo</title>
+    <title>Design System - Web Components</title>
+    <link rel="stylesheet" href="src/design_system/styles.css">
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--ds-font-family-body);
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: var(--ds-color-text);
+            background-color: var(--ds-color-background);
+            margin: 0;
+            padding: 0;
         }
         
         .demo-section {
-            margin: 32px 0;
-            padding: 24px;
-            background: white;
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white;
         }
         
-        .demo-title {
-            color: #007bff;
-            margin-bottom: 16px;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 8px;
+        .demo-section h2 {
+            margin-top: 0;
+            color: var(--ds-color-primary);
         }
         
-        .demo-item {
-            margin: 16px 0;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            border-left: 4px solid #007bff;
+        .form-group {
+            margin-bottom: 1rem;
         }
         
-        .demo-label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #495057;
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
         
-        .demo-code {
-            background: #e9ecef;
-            padding: 8px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            margin: 8px 0;
+        .form-row > * {
+            flex: 1;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group label, .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- Import all component files -->
+    <!-- Import all components -->
     <script type="module" src="src/components/ds-page.js"></script>
     <script type="module" src="src/components/ds-row.js"></script>
     <script type="module" src="src/components/ds-col.js"></script>
+    <script type="module" src="src/components/ds-text-input.js"></script>
+    <script type="module" src="src/components/ds-button.js"></script>
+    <script type="module" src="src/components/ds-radio.js"></script>
+    <script type="module" src="src/components/ds-checkbox.js"></script>
+    <script type="module" src="src/components/ds-textarea.js"></script>
+    <script type="module" src="src/components/ds-select.js"></script>
+    <script type="module" src="src/components/ds-option.js"></script>
+    <script type="module" src="src/components/ds-label.js"></script>
+    <script type="module" src="src/components/ds-fieldset.js"></script>
+    <script type="module" src="src/components/ds-legend.js"></script>
 
     <ds-page>
-        <header style="background: #007bff; color: white; padding: 24px; text-align: center;">
-            <h1>AI Design System - Web Components Demo</h1>
-            <p>A foundational design system built with native Web Components</p>
-        </header>
+        <ds-row>
+            <ds-col>
+                <h1>Design System - Form Components Demo</h1>
+                <p>This page demonstrates all the form components in the design system.</p>
+            </ds-col>
+        </ds-row>
 
-        <!-- ds-row Examples -->
-        <div class="demo-section">
-            <h2 class="demo-title">ds-row Component Examples</h2>
-            
-            <div class="demo-item">
-                <div class="demo-label">Default Row (flex-start, stretch)</div>
-                <div class="demo-code">&lt;ds-row&gt;</div>
-                <ds-row>
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Item 1</div>
-                    <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Item 2</div>
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Item 3</div>
-                </ds-row>
-            </div>
-
-            <div class="demo-item">
-                <div class="demo-label">Centered Row (center, center)</div>
-                <div class="demo-code">&lt;ds-row justify-content="center" align-items="center" gap="16px"&gt;</div>
-                <ds-row justify-content="center" align-items="center" gap="16px">
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Item 1</div>
-                    <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Item 2</div>
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Item 3</div>
-                </ds-row>
-            </div>
-
-            <div class="demo-item">
-                <div class="demo-label">Space Between Row</div>
-                <div class="demo-code">&lt;ds-row justify-content="space-between" align-items="center" gap="16px"&gt;</div>
-                <ds-row justify-content="space-between" align-items="center" gap="16px">
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Left</div>
-                    <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Center</div>
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Right</div>
-                </ds-row>
-            </div>
-
-            <div class="demo-item">
-                <div class="demo-label">Wrapped Row</div>
-                <div class="demo-code">&lt;ds-row wrap gap="12px"&gt;</div>
-                <ds-row wrap gap="12px">
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px; min-width: 150px;">Wide Item 1</div>
-                    <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px; min-width: 150px;">Wide Item 2</div>
-                    <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px; min-width: 150px;">Wide Item 3</div>
-                    <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px; min-width: 150px;">Wide Item 4</div>
-                </ds-row>
-            </div>
-        </div>
-
-        <!-- ds-col Examples -->
-        <div class="demo-section">
-            <h2 class="demo-title">ds-col Component Examples</h2>
-            
-            <div class="demo-item">
-                <div class="demo-label">Default Column</div>
-                <div class="demo-code">&lt;ds-col&gt;</div>
-                <div style="display: flex; height: 120px; background: #e9ecef; padding: 16px;">
-                    <ds-col style="background: white; padding: 16px; border-radius: 8px;">
-                        <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Content 1</div>
-                        <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Content 2</div>
-                    </ds-col>
+        <!-- Text Inputs Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Text Inputs</h2>
+                    
+                    <div class="form-group">
+                        <ds-label for="name-input">Full Name</ds-label>
+                        <ds-text-input id="name-input" name="name" placeholder="Enter your full name" required></ds-text-input>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="email-input">Email Address</ds-label>
+                        <ds-text-input id="email-input" type="email" name="email" placeholder="Enter your email" required></ds-text-input>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="password-input">Password</ds-label>
+                        <ds-text-input id="password-input" type="password" name="password" placeholder="Enter your password" required></ds-text-input>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="phone-input">Phone Number</ds-label>
+                        <ds-text-input id="phone-input" type="tel" name="phone" placeholder="Enter your phone number"></ds-text-input>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="disabled-input">Disabled Input</ds-label>
+                        <ds-text-input id="disabled-input" name="disabled" value="This input is disabled" disabled></ds-text-input>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="readonly-input">Read-only Input</ds-label>
+                        <ds-text-input id="readonly-input" name="readonly" value="This input is read-only" readonly></ds-text-input>
+                    </div>
                 </div>
-            </div>
+            </ds-col>
+        </ds-row>
 
-            <div class="demo-item">
-                <div class="demo-label">Growing Column with Centered Content</div>
-                <div class="demo-code">&lt;ds-col flex-grow="2" justify-content="center" align-items="center" gap="16px"&gt;</div>
-                <div style="display: flex; height: 120px; background: #e9ecef; padding: 16px;">
-                    <ds-col flex-grow="1" style="background: white; padding: 16px; border-radius: 8px;">
-                        <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Small Column</div>
-                    </ds-col>
-                    <ds-col flex-grow="2" justify-content="center" align-items="center" gap="16px" style="background: white; padding: 16px; border-radius: 8px;">
-                        <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Centered Content 1</div>
-                        <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Centered Content 2</div>
-                    </ds-col>
+        <!-- Buttons Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Buttons</h2>
+                    
+                    <div class="button-group">
+                        <ds-button type="button">Primary Button</ds-button>
+                        <ds-button type="submit">Submit Button</ds-button>
+                        <ds-button type="reset">Reset Button</ds-button>
+                        <ds-button disabled>Disabled Button</ds-button>
+                    </div>
                 </div>
-            </div>
+            </ds-col>
+        </ds-row>
 
-            <div class="demo-item">
-                <div class="demo-label">Fixed Width Column</div>
-                <div class="demo-code">&lt;ds-col flex-basis="200px" align-self="flex-start"&gt;</div>
-                <div style="display: flex; height: 120px; background: #e9ecef; padding: 16px;">
-                    <ds-col flex-grow="1" style="background: white; padding: 16px; border-radius: 8px;">
-                        <div style="background: #007bff; color: white; padding: 8px; border-radius: 4px;">Growing Column</div>
-                    </ds-col>
-                    <ds-col flex-basis="200px" align-self="flex-start" style="background: white; padding: 16px; border-radius: 8px;">
-                        <div style="background: #6c757d; color: white; padding: 8px; border-radius: 4px;">Fixed Width (200px)</div>
-                    </ds-col>
+        <!-- Radio Buttons Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Radio Buttons</h2>
+                    
+                    <ds-fieldset>
+                        <ds-legend>Select your preferred contact method</ds-legend>
+                        <div class="radio-group">
+                            <ds-radio name="contact-method" value="email">Email</ds-radio>
+                            <ds-radio name="contact-method" value="phone" checked>Phone</ds-radio>
+                            <ds-radio name="contact-method" value="mail">Mail</ds-radio>
+                            <ds-radio name="contact-method" value="sms" disabled>SMS (Disabled)</ds-radio>
+                        </div>
+                    </ds-fieldset>
                 </div>
-            </div>
-        </div>
+            </ds-col>
+        </ds-row>
 
-        <!-- Complex Layout Example -->
-        <div class="demo-section">
-            <h2 class="demo-title">Complex Layout Example</h2>
-            <p>This demonstrates how the components work together to create complex layouts:</p>
-            
-            <ds-row gap="24px" style="margin: 24px 0;">
-                <ds-col flex-grow="1">
-                    <ds-row gap="16px" wrap>
-                        <ds-col flex-basis="300px" style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3>Card 1</h3>
-                            <p>This card demonstrates responsive behavior with a minimum width of 300px.</p>
-                        </ds-col>
-                        <ds-col flex-basis="300px" style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3>Card 2</h3>
-                            <p>Cards will wrap to new lines on smaller screens while maintaining their minimum width.</p>
-                        </ds-col>
-                        <ds-col flex-basis="300px" style="background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3>Card 3</h3>
-                            <p>Each card maintains its minimum width and provides consistent spacing.</p>
-                        </ds-col>
-                    </ds-row>
-                </ds-col>
-            </ds-row>
-        </div>
+        <!-- Checkboxes Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Checkboxes</h2>
+                    
+                    <ds-fieldset>
+                        <ds-legend>Select your interests</ds-legend>
+                        <div class="checkbox-group">
+                            <ds-checkbox name="interests" value="technology">Technology</ds-checkbox>
+                            <ds-checkbox name="interests" value="sports" checked>Sports</ds-checkbox>
+                            <ds-checkbox name="interests" value="music">Music</ds-checkbox>
+                            <ds-checkbox name="interests" value="travel">Travel</ds-checkbox>
+                            <ds-checkbox name="interests" value="cooking" disabled>Cooking (Disabled)</ds-checkbox>
+                        </div>
+                    </ds-fieldset>
+                </div>
+            </ds-col>
+        </ds-row>
 
-        <!-- Navigation Example -->
-        <div class="demo-section">
-            <h2 class="demo-title">Navigation Example</h2>
-            <ds-row justify-content="space-between" align-items="center" style="background: #007bff; color: white; padding: 16px; border-radius: 8px;">
-                <h3 style="margin: 0;">Navigation Bar</h3>
-                <ds-row gap="16px">
-                    <a href="#" style="color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; transition: background-color 0.2s;">Home</a>
-                    <a href="#" style="color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; transition: background-color 0.2s;">About</a>
-                    <a href="#" style="color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; transition: background-color 0.2s;">Contact</a>
-                </ds-row>
-            </ds-row>
-        </div>
+        <!-- Textarea Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Textarea</h2>
+                    
+                    <div class="form-group">
+                        <ds-label for="message-textarea">Message</ds-label>
+                        <ds-textarea id="message-textarea" name="message" placeholder="Enter your message here..." rows="4"></ds-textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="bio-textarea">Bio</ds-label>
+                        <ds-textarea id="bio-textarea" name="bio" placeholder="Tell us about yourself..." rows="6"></ds-textarea>
+                    </div>
+                </div>
+            </ds-col>
+        </ds-row>
 
-        <footer style="background: #6c757d; color: white; padding: 24px; text-align: center; margin-top: 48px;">
-            <p>&copy; 2025 AI Design System - Web Components Demo</p>
-            <p>Built with native Web Components, Shadow DOM, and CSS Custom Properties</p>
-        </footer>
+        <!-- Select Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Select Dropdowns</h2>
+                    
+                    <div class="form-group">
+                        <ds-label for="country-select">Country</ds-label>
+                        <ds-select id="country-select" name="country">
+                            <ds-option value="">Please select a country...</ds-option>
+                            <ds-option value="us">United States</ds-option>
+                            <ds-option value="ca" selected>Canada</ds-option>
+                            <ds-option value="uk">United Kingdom</ds-option>
+                            <ds-option value="au">Australia</ds-option>
+                            <ds-option value="de">Germany</ds-option>
+                            <ds-option value="fr">France</ds-option>
+                            <ds-option value="jp">Japan</ds-option>
+                        </ds-select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <ds-label for="colors-select">Favorite Colors (Multiple)</ds-label>
+                        <ds-select id="colors-select" name="colors" multiple size="4">
+                            <ds-option value="red">Red</ds-option>
+                            <ds-option value="green" selected>Green</ds-option>
+                            <ds-option value="blue" selected>Blue</ds-option>
+                            <ds-option value="yellow">Yellow</ds-option>
+                            <ds-option value="purple">Purple</ds-option>
+                            <ds-option value="orange">Orange</ds-option>
+                        </ds-select>
+                    </div>
+                </div>
+            </ds-col>
+        </ds-row>
+
+        <!-- Complete Form Demo -->
+        <ds-row>
+            <ds-col>
+                <div class="demo-section">
+                    <h2>Complete Registration Form</h2>
+                    
+                    <form id="registration-form">
+                        <ds-fieldset>
+                            <ds-legend>Personal Information</ds-legend>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <ds-label for="first-name">First Name</ds-label>
+                                    <ds-text-input id="first-name" name="firstName" required></ds-text-input>
+                                </div>
+                                <div class="form-group">
+                                    <ds-label for="last-name">Last Name</ds-label>
+                                    <ds-text-input id="last-name" name="lastName" required></ds-text-input>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <ds-label for="email-reg">Email Address</ds-label>
+                                <ds-text-input id="email-reg" type="email" name="email" required></ds-text-input>
+                            </div>
+                            
+                            <div class="form-group">
+                                <ds-label for="password-reg">Password</ds-label>
+                                <ds-text-input id="password-reg" type="password" name="password" required></ds-text-input>
+                            </div>
+                        </ds-fieldset>
+                        
+                        <ds-fieldset>
+                            <ds-legend>Preferences</ds-legend>
+                            
+                            <div class="form-group">
+                                <ds-label for="newsletter">Communication Preferences</ds-label>
+                                <div class="checkbox-group">
+                                    <ds-checkbox name="newsletter" value="email" checked>Email Newsletter</ds-checkbox>
+                                    <ds-checkbox name="newsletter" value="sms">SMS Updates</ds-checkbox>
+                                    <ds-checkbox name="newsletter" value="push">Push Notifications</ds-checkbox>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <ds-label>Account Type</ds-label>
+                                <div class="radio-group">
+                                    <ds-radio name="account-type" value="personal">Personal Account</ds-radio>
+                                    <ds-radio name="account-type" value="business" checked>Business Account</ds-radio>
+                                    <ds-radio name="account-type" value="enterprise">Enterprise Account</ds-radio>
+                                </div>
+                            </div>
+                        </ds-fieldset>
+                        
+                        <ds-fieldset>
+                            <ds-legend>Additional Information</ds-legend>
+                            
+                            <div class="form-group">
+                                <ds-label for="bio-reg">Bio</ds-label>
+                                <ds-textarea id="bio-reg" name="bio" placeholder="Tell us about yourself..." rows="4"></ds-textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <ds-label for="country-reg">Country</ds-label>
+                                <ds-select id="country-reg" name="country" required>
+                                    <ds-option value="">Select your country...</ds-option>
+                                    <ds-option value="us">United States</ds-option>
+                                    <ds-option value="ca">Canada</ds-option>
+                                    <ds-option value="uk">United Kingdom</ds-option>
+                                    <ds-option value="au">Australia</ds-option>
+                                </ds-select>
+                            </div>
+                        </ds-fieldset>
+                        
+                        <div class="button-group">
+                            <ds-button type="submit">Create Account</ds-button>
+                            <ds-button type="reset">Reset Form</ds-button>
+                            <ds-button type="button">Cancel</ds-button>
+                        </div>
+                    </form>
+                </div>
+            </ds-col>
+        </ds-row>
     </ds-page>
+
+    <script>
+        // Add some basic form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registration-form');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Form submitted!');
+                console.log('Form data:', new FormData(form));
+                alert('Form submitted! Check the console for form data.');
+            });
+            
+            // Add event listeners to demonstrate component functionality
+            const inputs = document.querySelectorAll('ds-text-input, ds-textarea, ds-select');
+            inputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    console.log('Input changed:', e.target.tagName, e.target.value);
+                });
+            });
+            
+            const buttons = document.querySelectorAll('ds-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    console.log('Button clicked:', e.target.textContent);
+                });
+            });
+        });
+    </script>
 </body>
 </html> 

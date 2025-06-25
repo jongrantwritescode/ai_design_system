@@ -1,261 +1,418 @@
-# AI Design System - Web Components
+# Design System - Web Components
 
-A foundational design system built with native Web Components, focusing on essential Flexbox-based layout components (`ds-row`, `ds-col`, `ds-page`). The project demonstrates a "close to HTML spec" approach, uses plain CSS for styling, and prioritizes experimentation/readability.
+A comprehensive design system built with native Web Components, featuring layout components and form elements with consistent styling and behavior.
 
-## 🎯 Project Goal
+## Features
 
-Create a foundational design system built with native Web Components, focusing on essential Flexbox-based layout components. The project demonstrates a "close to HTML spec" approach, uses plain CSS for styling, and prioritizes experimentation/readability.
+- **Native Web Components**: Built using vanilla JavaScript and Web Components standards
+- **Shadow DOM**: Encapsulated styling with `mode: 'open'` for experimentation
+- **CSS Custom Properties**: Design tokens for consistent theming
+- **Flexbox Layout**: Responsive layout system with `ds-row` and `ds-col`
+- **Form Components**: Complete set of form elements with accessibility support
+- **Storybook Integration**: Interactive documentation and testing
+- **No Dependencies**: Pure vanilla JavaScript implementation
 
-## 🏗️ Core Principles
+## Components
 
-- **Native Web Components:** Use `Custom Elements API`, `Shadow DOM`, and `HTML Templates`
-- **Naming Convention:** All custom elements are prefixed with `ds-` (e.g., `<ds-row>`)
-- **Attribute Reflection:** Attributes set on the `ds-` component control the internal wrapped element's CSS properties
-- **Plain CSS:** All styling managed via external `.css` files, leveraging CSS custom properties (variables)
-- **Shadow DOM Mode:** Use `mode: 'open'` for Shadow DOM to facilitate experimentation and debugging
+### Layout Components
 
-## 📁 Project Structure
+#### `ds-page`
+A page container component that provides consistent max-width and padding.
 
-```
-/design-system-project
-├── src/
-│   ├── components/
-│   │   ├── ds-row.js          # Flexbox container for horizontal layouts
-│   │   ├── ds-col.js          # Flexbox item/container for vertical layouts
-│   │   └── ds-page.js         # Page wrapper with consistent margins
-│   ├── stories/
-│   │   ├── ds-row.stories.js  # Storybook stories for ds-row
-│   │   ├── ds-col.stories.js  # Storybook stories for ds-col
-│   │   └── ds-page.stories.js # Storybook stories for ds-page
-│   └── design_system/
-│       └── styles.css         # Centralized styles and design tokens
-├── .storybook/
-│   ├── main.js               # Storybook configuration
-│   ├── preview.js            # Storybook preview settings
-│   └── manager.js            # Storybook UI configuration
-├── package.json              # Project dependencies and scripts
-├── index.html               # Demo page showing component usage
-└── README.md                # This file
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js (v16+) and npm
-- Modern web browser with Web Components support
-
-### Installation
-
-1. **Clone or download the project**
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-### Running the Demo
-
-1. **Open the demo page:**
-   ```bash
-   # Open index.html in your browser
-   open index.html
-   ```
-   
-   Or serve it with a local server:
-   ```bash
-   npx serve .
-   ```
-
-### Running Storybook
-
-1. **Start Storybook development server:**
-   ```bash
-   npm run storybook
-   ```
-   
-   This will start Storybook on `http://localhost:6006`
-   
-2. **Build Storybook for production:**
-   ```bash
-   npm run build-storybook
-   ```
-
-## 🧩 Components
-
-### `ds-row`
-
-A Flexbox container for horizontal layouts.
-
-**Observable Attributes:**
-- `justify-content`: Controls horizontal alignment (`flex-start`, `center`, `space-between`, etc.)
-- `align-items`: Controls vertical alignment (`stretch`, `center`, `flex-start`, etc.)
-- `gap`: Spacing between flex items
-- `wrap`: Boolean attribute for flex wrapping
-
-**Example Usage:**
-```html
-<ds-row justify-content="space-between" align-items="center" gap="16px" wrap>
-    <div>Item 1</div>
-    <div>Item 2</div>
-    <div>Item 3</div>
-</ds-row>
-```
-
-### `ds-col`
-
-A Flexbox item that can also act as a Flexbox container for vertical layouts.
-
-**Flex Item Properties (applied to `:host`):**
-- `flex-grow`: How much the item can grow
-- `flex-shrink`: How much the item can shrink
-- `flex-basis`: Initial size of the flex item
-- `align-self`: Alignment within its flex container
-- `order`: Order within its flex container
-
-**Flex Container Properties (applied to internal container):**
-- `justify-content`: Controls vertical alignment of its children
-- `align-items`: Controls horizontal alignment of its children
-- `gap`: Spacing between its children
-- `wrap`: Boolean attribute for flex wrapping of its children
-
-**Example Usage:**
-```html
-<ds-col flex-grow="1" align-self="stretch" justify-content="space-around">
-    <p>Content Line 1</p>
-    <p>Content Line 2</p>
-</ds-col>
-```
-
-### `ds-page`
-
-A consistent wrapper around application content, handling page-level layout and margins.
-
-**Features:**
-- Full viewport height (`min-height: 100vh`)
-- Configurable padding via CSS variable `--ds-spacing-page-padding`
-- Optional max-width via CSS variable `--ds-page-max-width`
-- Flex container for its children
-
-**Example Usage:**
 ```html
 <ds-page>
-    <header><h1>My Application</h1></header>
-    <ds-row>
-        <ds-col flex-grow="1">Main Content Area</ds-col>
-        <ds-col flex-basis="200px">Sidebar</ds-col>
-    </ds-row>
-    <footer><p>&copy; 2025</p></footer>
+  <!-- Page content -->
 </ds-page>
 ```
 
-## 🎨 Design Tokens
+#### `ds-row`
+A flexbox row container with configurable alignment and spacing.
 
-The design system uses CSS custom properties (variables) defined in `src/design_system/styles.css`:
-
-### Spacing
-```css
---ds-spacing-xxs: 4px;
---ds-spacing-xs: 8px;
---ds-spacing-sm: 12px;
---ds-spacing-md: 16px;
---ds-spacing-lg: 24px;
---ds-spacing-xl: 32px;
---ds-spacing-xxl: 48px;
---ds-spacing-page-padding: var(--ds-spacing-lg);
+```html
+<ds-row justify-content="center" align-items="center" gap="16px">
+  <!-- Row content -->
+</ds-row>
 ```
 
-### Colors
-```css
---ds-color-primary: #007bff;
---ds-color-secondary: #6c757d;
---ds-color-text: #333;
---ds-color-background: #f8f9fa;
+**Attributes:**
+- `justify-content`: flex-start, center, flex-end, space-between, space-around
+- `align-items`: stretch, flex-start, center, flex-end, baseline
+- `gap`: CSS gap value (e.g., "8px", "1rem")
+- `wrap`: Enable flex wrapping
+
+#### `ds-col`
+A flexbox column container with configurable growth and alignment.
+
+```html
+<ds-col flex-grow="2" justify-content="center" align-items="center">
+  <!-- Column content -->
+</ds-col>
 ```
 
-### Typography
-```css
---ds-font-family-body: sans-serif;
---ds-font-family-heading: serif;
---ds-font-size-base: 16px;
+**Attributes:**
+- `flex-grow`: CSS flex-grow value
+- `flex-basis`: CSS flex-basis value
+- `justify-content`: flex-start, center, flex-end, space-between, space-around
+- `align-items`: stretch, flex-start, center, flex-end, baseline
+- `align-self`: auto, flex-start, center, flex-end, stretch, baseline
+- `gap`: CSS gap value
+
+### Form Components
+
+#### `ds-text-input`
+A text input component that wraps native input elements.
+
+```html
+<ds-text-input 
+  type="email" 
+  placeholder="Enter your email" 
+  required 
+  name="email">
+</ds-text-input>
 ```
 
-### Page Specific
-```css
---ds-page-max-width: 1200px;
+**Supported Types:** text, email, password, number, tel, url, search
+
+**Attributes:**
+- `type`: Input type (default: "text")
+- `value`: Current input value
+- `placeholder`: Placeholder text
+- `disabled`: Disable the input
+- `readonly`: Make the input read-only
+- `required`: Mark as required
+- `name`: Form field name
+- `id`: Unique identifier
+- `aria-label`: Accessibility label
+
+#### `ds-button`
+A button component that wraps native button elements.
+
+```html
+<ds-button type="submit" disabled>
+  Submit Form
+</ds-button>
 ```
 
-## 🔧 Development
+**Attributes:**
+- `type`: button, submit, reset (default: "button")
+- `disabled`: Disable the button
+- `name`: Form field name
+- `value`: Button value
 
-### Component Structure
+#### `ds-radio`
+A radio button component for single selection within a group.
 
-Each component follows this pattern:
+```html
+<ds-radio name="preference" value="option1" checked>
+  Option 1
+</ds-radio>
+```
 
-1. **Class Definition:** Extends `HTMLElement`
-2. **Constructor:** Sets up Shadow DOM with `mode: 'open'`
-3. **Template:** Contains internal markup and styles
-4. **Attribute Observation:** `static get observedAttributes()`
-5. **Attribute Changes:** `attributeChangedCallback()` method
-6. **Element Registration:** `customElements.define()`
+**Attributes:**
+- `name`: Radio group name (required for grouping)
+- `value`: Radio button value
+- `checked`: Mark as selected
+- `disabled`: Disable the radio button
+- `readonly`: Make read-only
+- `required`: Mark as required
+- `id`: Unique identifier
 
-### Adding New Components
+#### `ds-checkbox`
+A checkbox component for individual or grouped selections.
 
-1. Create a new `.js` file in `src/components/`
-2. Follow the established pattern
-3. Add corresponding story file in `src/stories/`
-4. Import in `index.html` for testing
+```html
+<ds-checkbox name="interests" value="technology" checked>
+  Technology
+</ds-checkbox>
+```
 
-### CSS Import Strategy
+**Attributes:**
+- `name`: Checkbox name
+- `value`: Checkbox value
+- `checked`: Mark as selected
+- `disabled`: Disable the checkbox
+- `readonly`: Make read-only
+- `required`: Mark as required
+- `id`: Unique identifier
 
-Components use `@import url('/src/design_system/styles.css');` in their Shadow DOM styles to load the centralized design system styles.
+#### `ds-textarea`
+A textarea component for multi-line text input.
 
-## 🌐 Browser Support
+```html
+<ds-textarea 
+  placeholder="Enter your message" 
+  rows="4" 
+  name="message">
+</ds-textarea>
+```
 
-- Modern browsers with Web Components support
-- Chrome 67+, Firefox 63+, Safari 10.1+, Edge 79+
-- No polyfills required for basic functionality
+**Attributes:**
+- `value`: Current textarea value
+- `placeholder`: Placeholder text
+- `rows`: Number of visible rows
+- `cols`: Number of visible columns
+- `disabled`: Disable the textarea
+- `readonly`: Make read-only
+- `required`: Mark as required
+- `name`: Form field name
+- `id`: Unique identifier
 
-## 📚 Storybook
+#### `ds-select`
+A select dropdown component with support for single and multiple selection.
 
-Storybook provides:
-- Interactive component documentation
-- Real-time attribute manipulation
-- Visual testing capabilities
-- Component usage examples
+```html
+<ds-select name="country" required>
+  <ds-option value="">Please select...</ds-option>
+  <ds-option value="us">United States</ds-option>
+  <ds-option value="ca" selected>Canada</ds-option>
+</ds-select>
+```
 
-### Storybook Features
+**Attributes:**
+- `value`: Currently selected value
+- `disabled`: Disable the select
+- `required`: Mark as required
+- `name`: Form field name
+- `multiple`: Enable multiple selection
+- `size`: Number of visible options
 
-- **Interactive Controls:** Real-time attribute manipulation
-- **Multiple Stories:** Various use cases and configurations
-- **Documentation:** Component descriptions and usage guidelines
-- **Visual Testing:** Screenshot testing capabilities
+#### `ds-option`
+An option component for use within `ds-select` elements.
 
-### Storybook Configuration
+```html
+<ds-option value="option1" selected disabled>
+  Option 1
+</ds-option>
+```
 
-The project uses Storybook 9.x with the following configuration:
+**Attributes:**
+- `value`: Option value
+- `disabled`: Disable the option
+- `selected`: Mark as selected
 
-- **Framework:** `@storybook/web-components`
-- **Addons:** Essentials, Interactions, Links
-- **Stories:** Located in `src/stories/`
-- **Preview:** Global styles and decorators in `.storybook/preview.js`
-- **Manager:** UI configuration in `.storybook/manager.js`
+#### `ds-label`
+A label component for form control association.
 
-## 🤝 Contributing
+```html
+<ds-label for="input-id">
+  Field Label
+</ds-label>
+```
 
-1. Follow the established component patterns
-2. Use the design tokens for consistency
-3. Add comprehensive stories for new components
-4. Test across different browsers
-5. Update documentation as needed
+**Attributes:**
+- `for`: ID of the associated form control
 
-## 📄 License
+#### `ds-fieldset`
+A fieldset component for grouping related form controls.
 
-MIT License - see LICENSE file for details
+```html
+<ds-fieldset>
+  <ds-legend>Personal Information</ds-legend>
+  <!-- Form controls -->
+</ds-fieldset>
+```
 
-## 🎯 Future Enhancements
+#### `ds-legend`
+A legend component for providing captions to fieldsets.
 
-- Additional layout components (`ds-grid`, `ds-stack`)
-- Form components (`ds-input`, `ds-button`)
-- Typography components (`ds-text`, `ds-heading`)
-- Theme switching capabilities
-- Build system integration
-- TypeScript support 
+```html
+<ds-legend>
+  Section Title
+</ds-legend>
+```
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd design-system-project
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+4. Open Storybook for interactive documentation:
+```bash
+npm run storybook
+```
+
+## Usage
+
+### Basic Setup
+
+Include the design system styles and components in your HTML:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="src/design_system/styles.css">
+</head>
+<body>
+    <!-- Import components -->
+    <script type="module" src="src/components/ds-page.js"></script>
+    <script type="module" src="src/components/ds-row.js"></script>
+    <script type="module" src="src/components/ds-col.js"></script>
+    <script type="module" src="src/components/ds-text-input.js"></script>
+    <!-- Import other components as needed -->
+    
+    <ds-page>
+        <ds-row>
+            <ds-col>
+                <h1>My Application</h1>
+            </ds-col>
+        </ds-row>
+    </ds-page>
+</body>
+</html>
+```
+
+### Form Example
+
+```html
+<form>
+    <ds-fieldset>
+        <ds-legend>Contact Information</ds-legend>
+        
+        <ds-row>
+            <ds-col>
+                <ds-label for="name">Full Name</ds-label>
+                <ds-text-input id="name" name="name" required></ds-text-input>
+            </ds-col>
+            <ds-col>
+                <ds-label for="email">Email</ds-label>
+                <ds-text-input id="email" type="email" name="email" required></ds-text-input>
+            </ds-col>
+        </ds-row>
+        
+        <ds-fieldset>
+            <ds-legend>Preferences</ds-legend>
+            
+            <ds-radio name="contact" value="email" checked>Email</ds-radio>
+            <ds-radio name="contact" value="phone">Phone</ds-radio>
+            
+            <ds-checkbox name="newsletter" value="subscribe" checked>Subscribe to newsletter</ds-checkbox>
+        </ds-fieldset>
+        
+        <ds-button type="submit">Submit</ds-button>
+    </ds-fieldset>
+</form>
+```
+
+## Design Tokens
+
+The design system uses CSS custom properties for consistent theming:
+
+```css
+:root {
+    /* Spacing */
+    --ds-spacing-xxs: 4px;
+    --ds-spacing-xs: 8px;
+    --ds-spacing-sm: 12px;
+    --ds-spacing-md: 16px;
+    --ds-spacing-lg: 24px;
+    --ds-spacing-xl: 32px;
+    --ds-spacing-xxl: 48px;
+    
+    /* Colors */
+    --ds-color-primary: #007bff;
+    --ds-color-secondary: #6c757d;
+    --ds-color-text: #333;
+    --ds-color-background: #f8f9fa;
+    
+    /* Typography */
+    --ds-font-family-body: sans-serif;
+    --ds-font-family-heading: serif;
+    --ds-font-size-base: 16px;
+    
+    /* Form Colors */
+    --ds-form-border-color: #ccc;
+    --ds-form-focus-color: var(--ds-color-primary);
+    --ds-form-error-color: #dc3545;
+    --ds-form-bg-color: white;
+    --ds-form-disabled-bg-color: #e9ecef;
+    --ds-form-text-color: var(--ds-color-text);
+    
+    /* Form Spacing & Sizing */
+    --ds-form-input-padding: 8px 12px;
+    --ds-form-border-radius: 4px;
+    --ds-form-line-height: 1.5;
+}
+```
+
+## Browser Support
+
+- Chrome 67+
+- Firefox 63+
+- Safari 10.1+
+- Edge 79+
+
+## Development
+
+### Project Structure
+
+```
+design-system-project/
+├── src/
+│   ├── components/          # Web Components
+│   │   ├── ds-page.js
+│   │   ├── ds-row.js
+│   │   ├── ds-col.js
+│   │   ├── ds-text-input.js
+│   │   ├── ds-button.js
+│   │   ├── ds-radio.js
+│   │   ├── ds-checkbox.js
+│   │   ├── ds-textarea.js
+│   │   ├── ds-select.js
+│   │   ├── ds-option.js
+│   │   ├── ds-label.js
+│   │   ├── ds-fieldset.js
+│   │   └── ds-legend.js
+│   ├── design_system/
+│   │   └── styles.css       # Design tokens and base styles
+│   └── stories/             # Storybook stories
+│       ├── ds-page.stories.js
+│       ├── ds-row.stories.js
+│       ├── ds-col.stories.js
+│       ├── ds-text-input.stories.js
+│       ├── ds-button.stories.js
+│       ├── ds-radio.stories.js
+│       ├── ds-checkbox.stories.js
+│       ├── ds-textarea.stories.js
+│       ├── ds-select.stories.js
+│       ├── ds-option.stories.js
+│       ├── ds-label.stories.js
+│       ├── ds-fieldset.stories.js
+│       └── ds-legend.stories.js
+├── .storybook/              # Storybook configuration
+├── index.html               # Demo page
+├── package.json
+└── README.md
+```
+
+### Available Scripts
+
+- `npm start`: Start development server
+- `npm run storybook`: Start Storybook
+- `npm run build-storybook`: Build Storybook for production
+- `npm test`: Run tests (if configured)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License. 
