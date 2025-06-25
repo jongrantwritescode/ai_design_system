@@ -1,4 +1,3 @@
-import { html } from 'lit';
 import '../components/ds-col.js';
 
 export default {
@@ -56,26 +55,53 @@ export default {
   }
 };
 
-const Template = (args) => html`
-  <div style="display: flex; height: 200px; background: #f0f0f0; padding: 16px;">
-    <ds-col
-      flex-grow="${args['flex-grow']}"
-      flex-shrink="${args['flex-shrink']}"
-      flex-basis="${args['flex-basis']}"
-      align-self="${args['align-self']}"
-      order="${args.order}"
-      justify-content="${args['justify-content']}"
-      align-items="${args['align-items']}"
-      gap="${args.gap}"
-      ?wrap="${args.wrap}"
-      style="background: white; padding: 16px; border-radius: 8px;"
-    >
-      <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Content 1</div>
-      <div style="background: var(--ds-color-secondary); color: white; padding: 8px; border-radius: 4px;">Content 2</div>
-      <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Content 3</div>
-    </ds-col>
-  </div>
-`;
+const Template = (args) => {
+  const container = document.createElement('div');
+  container.style.cssText = 'display: flex; height: 200px; background: #f0f0f0; padding: 16px;';
+  
+  const element = document.createElement('ds-col');
+  
+  // Set flex item properties
+  if (args['flex-grow'] !== undefined) {
+    element.setAttribute('flex-grow', args['flex-grow']);
+  }
+  if (args['flex-shrink'] !== undefined) {
+    element.setAttribute('flex-shrink', args['flex-shrink']);
+  }
+  if (args['flex-basis']) {
+    element.setAttribute('flex-basis', args['flex-basis']);
+  }
+  if (args['align-self']) {
+    element.setAttribute('align-self', args['align-self']);
+  }
+  if (args.order !== undefined) {
+    element.setAttribute('order', args.order);
+  }
+  
+  // Set flex container properties
+  if (args['justify-content']) {
+    element.setAttribute('justify-content', args['justify-content']);
+  }
+  if (args['align-items']) {
+    element.setAttribute('align-items', args['align-items']);
+  }
+  if (args.gap) {
+    element.setAttribute('gap', args.gap);
+  }
+  if (args.wrap) {
+    element.setAttribute('wrap', '');
+  }
+  
+  element.style.cssText = 'background: white; padding: 16px; border-radius: 8px;';
+  element.innerHTML = `
+    <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Content 1</div>
+    <div style="background: var(--ds-color-secondary); color: white; padding: 8px; border-radius: 4px;">Content 2</div>
+    <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Content 3</div>
+  `;
+  
+  container.appendChild(element);
+  return container;
+};
 
 export const Default = Template.bind({});
 Default.args = {

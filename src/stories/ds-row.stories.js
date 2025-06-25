@@ -1,4 +1,3 @@
-import { html } from 'lit';
 import '../components/ds-row.js';
 
 export default {
@@ -33,18 +32,30 @@ export default {
   }
 };
 
-const Template = (args) => html`
-  <ds-row
-    justify-content="${args['justify-content']}"
-    align-items="${args['align-items']}"
-    gap="${args.gap}"
-    ?wrap="${args.wrap}"
-  >
+const Template = (args) => {
+  const element = document.createElement('ds-row');
+  
+  if (args['justify-content']) {
+    element.setAttribute('justify-content', args['justify-content']);
+  }
+  if (args['align-items']) {
+    element.setAttribute('align-items', args['align-items']);
+  }
+  if (args.gap) {
+    element.setAttribute('gap', args.gap);
+  }
+  if (args.wrap) {
+    element.setAttribute('wrap', '');
+  }
+  
+  element.innerHTML = `
     <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Item 1</div>
     <div style="background: var(--ds-color-secondary); color: white; padding: 8px; border-radius: 4px;">Item 2</div>
     <div style="background: var(--ds-color-primary); color: white; padding: 8px; border-radius: 4px;">Item 3</div>
-  </ds-row>
-`;
+  `;
+  
+  return element;
+};
 
 export const Default = Template.bind({});
 Default.args = {
