@@ -1,4 +1,5 @@
 import '../components/ds-label.js';
+import '../components/ds-text-input.js';
 
 export default {
   title: 'Components/ds-label',
@@ -13,7 +14,7 @@ export default {
   argTypes: {
     for: {
       control: 'text',
-      description: 'The ID of the form control this label is associated with'
+      description: 'The ID of the associated form control'
     },
     content: {
       control: 'text',
@@ -66,7 +67,7 @@ export const WithInput = () => {
   label.setAttribute('for', 'example-input');
   label.innerHTML = 'Example Input:';
   
-  const input = document.createElement('input');
+  const input = document.createElement('ds-text-input');
   input.setAttribute('type', 'text');
   input.setAttribute('id', 'example-input');
   input.setAttribute('placeholder', 'Enter text here...');

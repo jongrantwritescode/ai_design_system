@@ -1,4 +1,5 @@
 import '../components/ds-legend.js';
+import '../components/ds-fieldset.js';
 
 export default {
   title: 'Components/ds-legend',
@@ -49,8 +50,7 @@ Required.args = {
 
 // Legend in Context Example
 export const InContext = () => {
-  const fieldset = document.createElement('fieldset');
-  fieldset.style.cssText = 'border: 1px solid #ccc; border-radius: 4px; padding: 16px; margin: 16px 0;';
+  const fieldset = document.createElement('ds-fieldset');
   
   const legend = document.createElement('ds-legend');
   legend.innerHTML = 'Contact Information';

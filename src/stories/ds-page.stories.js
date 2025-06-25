@@ -1,6 +1,10 @@
 import '../components/ds-page.js';
 import '../components/ds-row.js';
 import '../components/ds-col.js';
+import '../components/ds-button.js';
+import '../components/ds-text-input.js';
+import '../components/ds-textarea.js';
+import '../components/ds-label.js';
 
 export default {
   title: 'Components/ds-page',
@@ -98,12 +102,8 @@ export const SimpleContent = () => {
           This is a simple example showing how ds-page can be used to create clean, centered content layouts.
         </p>
         <ds-row justify-content="center" gap="16px">
-          <button style="background: var(--ds-color-primary); color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer;">
-            Get Started
-          </button>
-          <button style="background: var(--ds-color-secondary); color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer;">
-            Learn More
-          </button>
+          <ds-button type="button">Get Started</ds-button>
+          <ds-button type="button">Learn More</ds-button>
         </ds-row>
       </ds-col>
     </ds-row>
@@ -120,24 +120,22 @@ export const FormLayout = () => {
         
         <ds-col gap="16px">
           <div>
-            <label style="display: block; margin-bottom: 4px; font-weight: bold;">Name</label>
-            <input type="text" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <ds-label for="name-input">Name</ds-label>
+            <ds-text-input id="name-input" type="text" name="name"></ds-text-input>
           </div>
           
           <div>
-            <label style="display: block; margin-bottom: 4px; font-weight: bold;">Email</label>
-            <input type="email" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <ds-label for="email-input">Email</ds-label>
+            <ds-text-input id="email-input" type="email" name="email"></ds-text-input>
           </div>
           
           <div>
-            <label style="display: block; margin-bottom: 4px; font-weight: bold;">Message</label>
-            <textarea rows="4" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical;"></textarea>
+            <ds-label for="message-textarea">Message</ds-label>
+            <ds-textarea id="message-textarea" name="message" rows="4"></ds-textarea>
           </div>
           
           <ds-row justify-content="center" style="margin-top: 24px;">
-            <button style="background: var(--ds-color-primary); color: white; border: none; padding: 12px 32px; border-radius: 4px; cursor: pointer; font-size: 16px;">
-              Send Message
-            </button>
+            <ds-button type="submit">Send Message</ds-button>
           </ds-row>
         </ds-col>
       </ds-col>
