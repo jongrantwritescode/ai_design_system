@@ -1,4 +1,3 @@
-import { html } from 'lit';
 import '../components/ds-page.js';
 import '../components/ds-row.js';
 import '../components/ds-col.js';
@@ -15,8 +14,9 @@ export default {
   }
 };
 
-export const Default = () => html`
-  <ds-page>
+export const Default = () => {
+  const element = document.createElement('ds-page');
+  element.innerHTML = `
     <header style="background: var(--ds-color-primary); color: white; padding: 16px; text-align: center;">
       <h1>My Application</h1>
     </header>
@@ -42,11 +42,13 @@ export const Default = () => html`
     <footer style="background: var(--ds-color-secondary); color: white; padding: 16px; text-align: center;">
       <p>&copy; 2025 My Application</p>
     </footer>
-  </ds-page>
-`;
+  `;
+  return element;
+};
 
-export const ComplexLayout = () => html`
-  <ds-page>
+export const ComplexLayout = () => {
+  const element = document.createElement('ds-page');
+  element.innerHTML = `
     <header style="background: var(--ds-color-primary); color: white; padding: 16px;">
       <ds-row justify-content="space-between" align-items="center">
         <h1>Complex Layout Example</h1>
@@ -82,11 +84,13 @@ export const ComplexLayout = () => html`
     <footer style="background: var(--ds-color-secondary); color: white; padding: 16px; text-align: center;">
       <p>&copy; 2025 Complex Layout Example</p>
     </footer>
-  </ds-page>
-`;
+  `;
+  return element;
+};
 
-export const SimpleContent = () => html`
-  <ds-page>
+export const SimpleContent = () => {
+  const element = document.createElement('ds-page');
+  element.innerHTML = `
     <ds-row justify-content="center" align-items="center" style="min-height: 60vh;">
       <ds-col style="text-align: center; max-width: 600px;">
         <h1>Welcome to the Design System</h1>
@@ -103,11 +107,13 @@ export const SimpleContent = () => html`
         </ds-row>
       </ds-col>
     </ds-row>
-  </ds-page>
-`;
+  `;
+  return element;
+};
 
-export const FormLayout = () => html`
-  <ds-page>
+export const FormLayout = () => {
+  const element = document.createElement('ds-page');
+  element.innerHTML = `
     <ds-row justify-content="center" style="margin: 24px 0;">
       <ds-col flex-basis="500px" style="background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         <h2 style="text-align: center; margin-bottom: 24px;">Contact Form</h2>
@@ -136,5 +142,6 @@ export const FormLayout = () => html`
         </ds-col>
       </ds-col>
     </ds-row>
-  </ds-page>
-`; 
+  `;
+  return element;
+}; 

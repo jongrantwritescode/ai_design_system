@@ -31,7 +31,8 @@ Create a foundational design system built with native Web Components, focusing o
 │       └── styles.css         # Centralized styles and design tokens
 ├── .storybook/
 │   ├── main.js               # Storybook configuration
-│   └── preview.js            # Storybook preview settings
+│   ├── preview.js            # Storybook preview settings
+│   └── manager.js            # Storybook UI configuration
 ├── package.json              # Project dependencies and scripts
 ├── index.html               # Demo page showing component usage
 └── README.md                # This file
@@ -71,6 +72,8 @@ Create a foundational design system built with native Web Components, focusing o
    ```bash
    npm run storybook
    ```
+   
+   This will start Storybook on `http://localhost:6006`
    
 2. **Build Storybook for production:**
    ```bash
@@ -225,6 +228,16 @@ Storybook provides:
 - **Multiple Stories:** Various use cases and configurations
 - **Documentation:** Component descriptions and usage guidelines
 - **Visual Testing:** Screenshot testing capabilities
+
+### Storybook Configuration
+
+The project uses Storybook 9.x with the following configuration:
+
+- **Framework:** `@storybook/web-components`
+- **Addons:** Essentials, Interactions, Links
+- **Stories:** Located in `src/stories/`
+- **Preview:** Global styles and decorators in `.storybook/preview.js`
+- **Manager:** UI configuration in `.storybook/manager.js`
 
 ## 🤝 Contributing
 

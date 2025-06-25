@@ -1,0 +1,57 @@
+[12:06:44.886] [DEBUG] Extracting storybook data...
+[12:06:44.886] [DEBUG] Getting Storybook info...
+[12:06:44.887] [DEBUG] Loading main config...
+[12:06:44.918] [DEBUG] Getting stories paths...
+[12:06:44.925] [DEBUG] Getting package manager...
+[12:06:44.995] [DEBUG] Getting Storybook version...
+[12:06:44.995] [INFO] 🔎 checking possible migrations..
+[12:06:44.996] [DEBUG] Running eslintPlugin migration checks
+[12:06:44.997] [DEBUG] End of eslintPlugin migration checks
+[12:06:44.997] [DEBUG] Running addon-mdx-gfm-remove migration checks
+[12:06:44.997] [DEBUG] End of addon-mdx-gfm-remove migration checks
+[12:06:44.997] [DEBUG] Running addon-storysource-code-panel migration checks
+[12:06:44.997] [DEBUG] End of addon-storysource-code-panel migration checks
+[12:06:44.997] [DEBUG] Running initial-globals migration checks
+[12:06:45.005] [DEBUG] End of initial-globals migration checks
+[12:06:45.005] [DEBUG] Running addon-a11y-addon-test migration checks
+[12:06:45.005] [DEBUG] End of addon-a11y-addon-test migration checks
+[12:06:45.005] [DEBUG] Running consolidated-imports migration checks
+[12:06:45.005] [DEBUG] End of consolidated-imports migration checks
+[12:06:45.005] [DEBUG] Running addon-experimental-test migration checks
+[12:06:45.006] [DEBUG] Getting installed version for @storybook/experimental-addon-test...
+[12:06:45.147] [DEBUG] End of addon-experimental-test migration checks
+[12:06:45.147] [DEBUG] Running rnstorybook-config migration checks
+[12:06:45.147] [DEBUG] End of rnstorybook-config migration checks
+[12:06:45.147] [DEBUG] Running remove-addon-interactions migration checks
+[12:06:45.147] [DEBUG] End of remove-addon-interactions migration checks
+[12:06:45.148] [DEBUG] Running renderer-to-framework migration checks
+[12:06:45.148] [DEBUG] End of renderer-to-framework migration checks
+[12:06:45.148] [DEBUG] Running remove-essential-addons migration checks
+[12:06:45.148] [DEBUG] End of remove-essential-addons migration checks
+[12:06:45.148] [DEBUG] Running addon-a11y-parameters migration checks
+[12:06:45.148] [DEBUG] End of addon-a11y-parameters migration checks
+[12:06:45.148] [DEBUG] Running remove-docs-autodocs migration checks
+[12:06:45.149] [DEBUG] End of remove-docs-autodocs migration checks
+[12:06:45.149] [DEBUG] Running wrap-require migration checks
+[12:06:45.150] [DEBUG] End of wrap-require migration checks
+[12:06:45.150] [INFO] 
+[12:06:45.150] [INFO] If you'd like to run the migrations again, you can do so by running 'npx storybook automigrate'
+
+The automigrations try to migrate common patterns in your project, but might not contain everything needed to migrate to the latest version of Storybook.
+
+Please check the changelog and migration guide for manual migrations and more information: https://storybook.js.org/docs/migration-guide
+And reach out on Discord if you need help: https://discord.gg/storybook
+[12:06:45.153] [INFO] 
+[12:06:45.153] [INFO] Checking the health of your Storybook..
+[12:06:45.153] [DEBUG] Getting Storybook info...
+[12:06:45.153] [DEBUG] Loading main config...
+[12:06:45.155] [DEBUG] Getting stories paths...
+[12:06:45.155] [DEBUG] Getting package manager...
+[12:06:45.155] [DEBUG] Getting Storybook version...
+[12:06:45.156] [ERROR] Failed to run doctor checks for project .storybook:
+Error: No Storybook dependencies found in the package.json
+[12:06:45.156] [ERROR] .storybook: 1 problem found
+[12:06:45.156] [INFO] Failed to run doctor checks: No Storybook dependencies found in the package.json
+[12:06:45.156] [INFO] Storybook doctor is complete!
+[12:06:45.156] [INFO] You can always recheck the health of your project(s) by running:
+npx storybook doctor
