@@ -44,7 +44,7 @@ class DsButton extends HTMLElement {
      * Define which attributes should trigger attributeChangedCallback
      */
     static get observedAttributes() {
-        return ['type', 'disabled', 'name', 'value'];
+        return ['type', 'disabled', 'name', 'value', 'variant'];
     }
     
     /**
@@ -72,6 +72,15 @@ class DsButton extends HTMLElement {
                 
             case 'value':
                 this.button.value = newValue || '';
+                break;
+                
+            case 'variant':
+                // Remove existing variant classes
+                this.button.classList.remove('primary', 'secondary', 'danger');
+                // Add new variant class if specified
+                if (newValue) {
+                    this.button.classList.add(newValue);
+                }
                 break;
         }
     }
@@ -131,6 +140,18 @@ class DsButton extends HTMLElement {
         this.button.value = val;
     }
     
+    get variant() {
+        return this.getAttribute('variant');
+    }
+    
+    set variant(val) {
+        if (val) {
+            this.setAttribute('variant', val);
+        } else {
+            this.removeAttribute('variant');
+        }
+    }
+    
     /**
      * Called when the element is connected to the DOM
      * Apply initial attributes
@@ -141,6 +162,7 @@ class DsButton extends HTMLElement {
         this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
         this.attributeChangedCallback('name', null, this.getAttribute('name'));
         this.attributeChangedCallback('value', null, this.getAttribute('value'));
+        this.attributeChangedCallback('variant', null, this.getAttribute('variant'));
     }
 }
 

@@ -28,6 +28,11 @@ export default {
       control: 'text',
       description: 'The value attribute for form submission'
     },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'danger'],
+      description: 'The visual variant of the button'
+    },
     content: {
       control: 'text',
       description: 'The text content of the button'
@@ -50,6 +55,9 @@ const Template = (args) => {
   }
   if (args.value) {
     element.setAttribute('value', args.value);
+  }
+  if (args.variant) {
+    element.setAttribute('variant', args.variant);
   }
   
   // Set content
@@ -94,11 +102,20 @@ WithValue.args = {
 export const Primary = Template.bind({});
 Primary.args = {
   type: 'button',
-  content: 'Primary Action'
+  content: 'Primary Action',
+  variant: 'primary'
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
   type: 'button',
-  content: 'Secondary Action'
+  content: 'Secondary Action',
+  variant: 'secondary'
+};
+
+export const Danger = Template.bind({});
+Danger.args = {
+  type: 'button',
+  content: 'Delete Item',
+  variant: 'danger'
 }; 

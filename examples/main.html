@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Examples</title>
+    <link rel="stylesheet" href="../src/design_system/styles.css">
+    <style>
+        body {
+            font-family: var(--ds-font-family-body);
+            line-height: 1.6;
+            color: var(--ds-color-text);
+            background-color: var(--ds-color-background);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .example-link {
+            display: block;
+            padding: 16px;
+            margin: 8px 0;
+            background: white;
+            border: 1px solid var(--ds-form-border-color);
+            border-radius: var(--ds-form-border-radius);
+            text-decoration: none;
+            color: var(--ds-color-primary);
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .example-link:hover {
+            background-color: var(--ds-color-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .example-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .example-description {
+            font-size: 0.9em;
+            color: var(--ds-color-secondary);
+        }
+        
+        .example-link:hover .example-description {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Import design system components -->
+    <script type="module" src="../src/components/ds-page.js"></script>
+    <script type="module" src="../src/components/ds-row.js"></script>
+    <script type="module" src="../src/components/ds-col.js"></script>
+
+    <ds-page>
+        <ds-row justify-content="center" style="margin: 48px 0;">
+            <ds-col flex-basis="800px">
+                <h1 style="text-align: center; color: var(--ds-color-primary); margin-bottom: 32px;">
+                    Design System Examples
+                </h1>
+                
+                <p style="text-align: center; font-size: 1.1em; margin-bottom: 48px; color: var(--ds-color-secondary);">
+                    Explore practical applications of our design system components in real-world scenarios.
+                </p>
+                
+                <ds-col gap="16px">
+                    <a href="login-signup-form/index.html" class="example-link">
+                        <div class="example-title">Login / Sign Up Form</div>
+                        <div class="example-description">
+                            A dynamic form that switches between login and sign-up states with client-side validation, 
+                            demonstrating form components, state management, and user interaction patterns.
+                        </div>
+                    </a>
+                    
+                    <!-- Future examples can be added here -->
+                    <div style="text-align: center; padding: 32px; color: var(--ds-color-secondary); font-style: italic;">
+                        More examples coming soon...
+                    </div>
+                </ds-col>
+            </ds-col>
+        </ds-row>
+    </ds-page>
+</body>
+</html> 
