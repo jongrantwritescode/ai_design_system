@@ -1,0 +1,22 @@
+{
+  "name": "ai-design-system",
+  "version": "1.0.0",
+  "description": "A foundational design system built with native Web Components",
+  "main": "index.html",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web-components",
+    "design-system",
+    "flexbox",
+    "layout"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "storybook": "^9.0.13"
+  }
+}

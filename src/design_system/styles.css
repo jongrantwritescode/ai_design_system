@@ -1,0 +1,68 @@
+/* CSS Reset/Normalization */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Design Tokens (CSS Variables) */
+:root {
+    /* Spacing */
+    --ds-spacing-xxs: 4px;
+    --ds-spacing-xs: 8px;
+    --ds-spacing-sm: 12px;
+    --ds-spacing-md: 16px;
+    --ds-spacing-lg: 24px;
+    --ds-spacing-xl: 32px;
+    --ds-spacing-xxl: 48px;
+    --ds-spacing-page-padding: var(--ds-spacing-lg); /* Default page padding */
+
+    /* Colors */
+    --ds-color-primary: #007bff;
+    --ds-color-secondary: #6c757d;
+    --ds-color-text: #333;
+    --ds-color-background: #f8f9fa;
+
+    /* Typography */
+    --ds-font-family-body: sans-serif;
+    --ds-font-family-heading: serif;
+    --ds-font-size-base: 16px;
+
+    /* Page specific */
+    --ds-page-max-width: 1200px;
+}
+
+/* Global base styles */
+html {
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-base);
+    line-height: 1.5;
+    color: var(--ds-color-text);
+    background-color: var(--ds-color-background);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Utility classes */
+.ds-text-center {
+    text-align: center;
+}
+
+.ds-text-left {
+    text-align: left;
+}
+
+.ds-text-right {
+    text-align: right;
+}
+
+.ds-margin-0 {
+    margin: 0;
+}
+
+.ds-padding-0 {
+    padding: 0;
+} 
