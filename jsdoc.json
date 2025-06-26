@@ -1,0 +1,21 @@
+{
+  "source": {
+    "include": ["src/components"],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules/|docs-output/)"
+  },
+  "plugins": [],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "default": {
+      "outputSourceFiles": true
+    }
+  },
+  "opts": {
+    "encoding": "utf8",
+    "destination": "./docs-output/",
+    "recurse": true,
+    "verbose": true
+  }
+} 
