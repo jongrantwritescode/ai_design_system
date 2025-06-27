@@ -95,7 +95,7 @@ Include the design system styles and components in your HTML:
 
 ## Documentation
 
-- **[Storybook](https://jongrantwritescode.github.io/ai_design_system/)**: Interactive component documentation and testing
+- **[Storybook](https://jongrantwritescode.github.io/ai_design_system/storybook/)**: Interactive component documentation and testing
 - **[Examples](./examples/)**: Example implementations and use cases
 - **[JSDoc Documentation](./docs-output/)**: Comprehensive API documentation
 - **[Documentation](./docs/)**: Additional documentation in the docs folder

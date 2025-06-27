@@ -36,11 +36,20 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
       
+      # Prepare storybook for subdirectory deployment
+      - name: Prepare storybook for subdirectory
+        run: |
+          # Create a directory for the storybook build
+          mkdir -p storybook-build/storybook
+          
+          # Copy storybook files to the storybook subdirectory
+          cp -r storybook-static/* storybook-build/storybook/
+      
       # Upload build artifacts
       - name: Upload build artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-static
+          path: storybook-build
 
   deploy:
     needs: build
