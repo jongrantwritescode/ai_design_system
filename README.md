@@ -1,6 +1,6 @@
 # Design System - Web Components
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-blue?style=flat-square)](https://jon.github.io/ai_design_system/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-blue?style=flat-square)](https://jongrantwritescode.github.io/ai_design_system/)
 
 A comprehensive design system built with native Web Components, featuring layout components and form elements with consistent styling and behavior.
 
