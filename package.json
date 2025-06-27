@@ -8,7 +8,9 @@
     "build-storybook": "storybook build",
     "generate-docs": "jsdoc -c jsdoc.json",
     "serve-docs": "npm run generate-docs && python3 -m http.server 8080 --directory docs-output & sleep 2 && open http://localhost:8080",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "keywords": [
     "web-components",
@@ -25,6 +27,11 @@
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/web-components": "^8.6.14",
     "@storybook/web-components-webpack5": "^8.6.14",
-    "jsdoc": "^4.0.2"
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.4.2",
+    "jsdoc": "^4.0.2",
+    "jsdom": "^24.0.0",
+    "vitest": "^2.1.8",
+    "@vitest/ui": "^2.1.8"
   }
 }

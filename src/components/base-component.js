@@ -21,16 +21,33 @@ class BaseComponent extends HTMLElement {
     constructor(options = {}) {
         super();
         
+        // ARIA config defaults
+        const ariaConfig = options.ariaConfig || {};
+        this.ariaConfig = {
+            requiredAriaAttributes: ariaConfig.requiredAriaAttributes || [],
+            staticAriaAttributes: ariaConfig.staticAriaAttributes || {},
+            dynamicAriaAttributes: ariaConfig.dynamicAriaAttributes || [],
+            ...ariaConfig
+        };
+
+        // Merge ARIA attributes into observedAttributes
+        const ariaObserved = [
+            ...this.ariaConfig.dynamicAriaAttributes || [],
+            ...this.ariaConfig.requiredAriaAttributes || []
+        ];
         this.options = {
-            display: 'block',
-            observedAttributes: [],
-            attributeHandlers: {},
-            events: [],
-            targetSelector: null,
-            ...options
+            display: options.display || 'block',
+            observedAttributes: Array.from(new Set([...(options.observedAttributes || []), ...ariaObserved])),
+            attributeHandlers: { ...(options.attributeHandlers || {}) },
+            events: options.events || [],
+            targetSelector: options.targetSelector || null,
+            template: options.template,
         };
         
+        // Add ARIA attribute handlers
+        this.addAriaAttributeHandlers();
         this.setupShadowDOM();
+        this.setupARIA();
         this.setupEventListeners();
     }
     
@@ -43,8 +60,6 @@ class BaseComponent extends HTMLElement {
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
-                @import url('/src/design_system/styles.css');
-                
                 :host {
                     display: ${this.options.display};
                 }
@@ -86,14 +101,6 @@ class BaseComponent extends HTMLElement {
     }
     
     /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return this.prototype.options?.observedAttributes || [];
-    }
-    
-    /**
      * Called when one of the component's observed attributes is added, removed, or changed.
      * @param {string} name - The name of the attribute that changed.
      * @param {string|null} oldValue - The attribute's old value.
@@ -106,17 +113,26 @@ class BaseComponent extends HTMLElement {
         if (handler) {
             handler.call(this, newValue);
         }
+        // If ARIA attribute, re-validate
+        if ((this.ariaConfig.dynamicAriaAttributes || []).includes(name) || (this.ariaConfig.requiredAriaAttributes || []).includes(name)) {
+            this.warnMissingARIA();
+        }
     }
     
     /**
      * Called when the element is connected to the DOM.
-     * Applies initial attributes.
+     * Applies initial attributes and ensures styles are applied.
      */
     connectedCallback() {
+        // Force a reflow to ensure styles are applied
+        this.offsetHeight;
+        
         // Apply initial attributes
         this.options.observedAttributes.forEach(attr => {
             this.attributeChangedCallback(attr, null, this.getAttribute(attr));
         });
+        // Warn about missing/invalid ARIA
+        this.warnMissingARIA();
     }
     
     /**
@@ -179,9 +195,138 @@ class BaseComponent extends HTMLElement {
             }
         };
     }
+
+    setupARIA() {
+        // Apply static ARIA attributes
+        if (this.targetElement && this.ariaConfig.staticAriaAttributes) {
+            Object.entries(this.ariaConfig.staticAriaAttributes).forEach(([attr, value]) => {
+                this.targetElement.setAttribute(attr, value);
+            });
+        }
+    }
+
+    addAriaAttributeHandlers() {
+        if (!this.options.attributeHandlers) this.options.attributeHandlers = {};
+        const allAria = [
+            ...(this.ariaConfig.dynamicAriaAttributes || []),
+            ...(this.ariaConfig.requiredAriaAttributes || [])
+        ];
+        allAria.forEach(attr => {
+            if (!this.options.attributeHandlers[attr]) {
+                this.options.attributeHandlers[attr] = BaseComponent.createAriaAttributeHandler(attr);
+            }
+        });
+    }
+
+    static createAriaAttributeHandler(attributeName) {
+        return function(newValue) {
+            // Ensure targetElement is available
+            if (!this.targetElement) {
+                this.targetElement = this.shadowRoot?.querySelector(this.options.targetSelector);
+            }
+            
+            if (this.targetElement) {
+                // Don't override static attributes
+                if (this.ariaConfig.staticAriaAttributes && this.ariaConfig.staticAriaAttributes[attributeName]) {
+                    return;
+                }
+                
+                if (newValue === null || newValue === undefined) {
+                    this.targetElement.removeAttribute(attributeName);
+                } else {
+                    this.targetElement.setAttribute(attributeName, newValue);
+                }
+            }
+        };
+    }
+
+    static createAriaPropertyHandler(propertyName) {
+        return {
+            get() { return this.targetElement?.getAttribute(propertyName); },
+            set(val) {
+                if (this.targetElement) {
+                    if (val === null || val === undefined) {
+                        this.targetElement.removeAttribute(propertyName);
+                    } else {
+                        this.targetElement.setAttribute(propertyName, val);
+                    }
+                }
+            }
+        };
+    }
+
+    static createAriaStateHandler(stateName) {
+        return function(newValue) {
+            if (this.targetElement) {
+                if (newValue === null || newValue === undefined) {
+                    this.targetElement.removeAttribute(stateName);
+                } else {
+                    this.targetElement.setAttribute(stateName, newValue);
+                }
+            }
+        };
+    }
+
+    validateAriaTokens(attributeName, value, allowedTokens) {
+        if (!allowedTokens.includes(value)) {
+            return `Invalid value '${value}' for ${attributeName}. Allowed: ${allowedTokens.join(', ')}`;
+        }
+        return null;
+    }
+
+    checkAriaReferences(attributeName, value) {
+        if (!value) return null;
+        const ids = value.split(/\s+/);
+        for (const id of ids) {
+            if (!document.getElementById(id)) {
+                return `Element referenced by ${attributeName} ('${id}') does not exist in the document.`;
+            }
+        }
+        return null;
+    }
+
+    validateARIA() {
+        const errors = [];
+        // Check required ARIA attributes
+        (this.ariaConfig.requiredAriaAttributes || []).forEach(attr => {
+            if (!this.hasAttribute(attr) && !this.targetElement?.hasAttribute(attr)) {
+                errors.push(`Missing required ARIA attribute: ${attr}`);
+            }
+        });
+        // Validate ARIA tokens (if any)
+        if (this.ariaConfig.tokenValidation) {
+            Object.entries(this.ariaConfig.tokenValidation).forEach(([attr, allowedTokens]) => {
+                const val = this.getAttribute(attr) || this.targetElement?.getAttribute(attr);
+                if (val && !allowedTokens.includes(val)) {
+                    errors.push(this.validateAriaTokens(attr, val, allowedTokens));
+                }
+            });
+        }
+        // Validate ARIA references
+        (this.ariaConfig.referenceAttributes || []).forEach(attr => {
+            const val = this.getAttribute(attr) || this.targetElement?.getAttribute(attr);
+            const refError = this.checkAriaReferences(attr, val);
+            if (refError) errors.push(refError);
+        });
+        return errors;
+    }
+
+    warnMissingARIA() {
+        const errors = this.validateARIA();
+        errors.forEach(msg => {
+            console.warn(`[${this.constructor.name}] ARIA validation: ${msg}`);
+        });
+    }
+
+    /**
+     * Defines which attributes the component observes for changes.
+     * @returns {Array<string>} An array of attribute names to observe.
+     */
+    static get observedAttributes() {
+        // This will be overridden by subclasses
+        return [];
+    }
 }
 
 // Export for use in other components
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = BaseComponent;
-} 
+export default BaseComponent;

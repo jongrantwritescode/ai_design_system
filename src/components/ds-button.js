@@ -37,23 +37,34 @@
  * <!-- Disabled button -->
  * <ds-button disabled variant="secondary">Disabled Button</ds-button>
  */
+import BaseComponent from './base-component.js';
+
 class DsButton extends BaseComponent {
     constructor() {
-        super();
-        
-        // Define the template with internal markup and styles
+        // ARIA config for ds-button
+        const ariaConfig = {
+            staticAriaAttributes: { role: 'button' },
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby',
+                'aria-pressed',
+                'aria-expanded',
+                'aria-haspopup'
+            ],
+            requiredAriaAttributes: [], // none required, but warn about missing labels
+            referenceAttributes: ['aria-describedby'],
+            tokenValidation: {
+                'aria-haspopup': ['false', 'true', 'menu', 'listbox', 'tree', 'grid', 'dialog'],
+                'aria-pressed': ['false', 'true', 'mixed', 'undefined'],
+                'aria-expanded': ['false', 'true', 'undefined']
+            }
+        };
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
                 @import url('/src/design_system/styles.css');
-                
-                :host {
-                    display: inline-block;
-                }
-                
-                .wrapper {
-                    width: 100%;
-                }
+                :host { display: inline-block; }
+                .wrapper { width: 100%; }
             </style>
             <div class="wrapper">
                 <button part="button" type="button">
@@ -61,15 +72,22 @@ class DsButton extends BaseComponent {
                 </button>
             </div>
         `;
-        
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['type', 'disabled', 'name', 'value', 'variant']);
-        
-        // Store reference to the internal button for attribute changes
+        super({
+            template: template.innerHTML,
+            targetSelector: 'button',
+            ariaConfig,
+            events: ['click', 'focus', 'blur'],
+            observedAttributes: ['type', 'disabled', 'name', 'value', 'variant']
+        });
         this.button = this.shadowRoot.querySelector('button');
-        
-        // Set up event listeners
-        this.setupEventListeners();
+    }
+    
+    /**
+     * Defines which attributes the component observes for changes.
+     * @returns {Array<string>} An array of attribute names to observe.
+     */
+    static get observedAttributes() {
+        return ['type', 'disabled', 'name', 'value', 'variant', 'aria-label', 'aria-describedby', 'aria-pressed', 'aria-expanded', 'aria-haspopup'];
     }
     
     /**
@@ -79,6 +97,9 @@ class DsButton extends BaseComponent {
      * @param {string|null} newValue - The attribute's new value.
      */
     attributeChangedCallback(name, oldValue, newValue) {
+        // Call parent method first
+        super.attributeChangedCallback(name, oldValue, newValue);
+        
         if (oldValue === newValue) return; // No change
         
         switch (name) {
@@ -111,26 +132,6 @@ class DsButton extends BaseComponent {
                 }
                 break;
         }
-    }
-    
-    /**
-     * Sets up event listeners to re-dispatch events from the host element.
-     */
-    setupEventListeners() {
-        const events = ['click', 'focus', 'blur'];
-        
-        events.forEach(eventType => {
-            this.button.addEventListener(eventType, (event) => {
-                // Create a new event to dispatch from the host
-                const newEvent = new Event(eventType, {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true
-                });
-                
-                this.dispatchEvent(newEvent);
-            });
-        });
     }
     
     /**
@@ -215,6 +216,103 @@ class DsButton extends BaseComponent {
         } else {
             this.removeAttribute('variant');
         }
+    }
+
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.button.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.button.removeAttribute('aria-label');
+        } else {
+            this.button.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.button.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.button.removeAttribute('aria-describedby');
+        } else {
+            this.button.setAttribute('aria-describedby', val);
+        }
+    }
+    get ariaPressed() { 
+        const value = this.button.getAttribute('aria-pressed');
+        return value === null ? null : value;
+    }
+    set ariaPressed(val) { 
+        if (val === null || val === undefined) {
+            this.button.removeAttribute('aria-pressed');
+        } else {
+            this.button.setAttribute('aria-pressed', val);
+        }
+    }
+    get ariaExpanded() { 
+        const value = this.button.getAttribute('aria-expanded');
+        return value === null ? null : value;
+    }
+    set ariaExpanded(val) { 
+        if (val === null || val === undefined) {
+            this.button.removeAttribute('aria-expanded');
+        } else {
+            this.button.setAttribute('aria-expanded', val);
+        }
+    }
+    get ariaHasPopup() { 
+        const value = this.button.getAttribute('aria-haspopup');
+        return value === null ? null : value;
+    }
+    set ariaHasPopup(val) { 
+        if (val === null || val === undefined) {
+            this.button.removeAttribute('aria-haspopup');
+        } else {
+            this.button.setAttribute('aria-haspopup', val);
+        }
+    }
+
+    // Override validateARIA for button-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        
+        // Accessible name check - check host element's text content and ARIA attributes
+        const hostTextContent = this.textContent.trim();
+        const hostAriaLabel = this.getAttribute('aria-label');
+        const hostAriaLabelledBy = this.getAttribute('aria-labelledby');
+        const buttonAriaLabel = this.button.getAttribute('aria-label');
+        const buttonAriaLabelledBy = this.button.getAttribute('aria-labelledby');
+        
+        const hasName = hostTextContent || hostAriaLabel || hostAriaLabelledBy || buttonAriaLabel || buttonAriaLabelledBy;
+        
+        if (!hasName) {
+            errors.push('Button has no accessible name (text, aria-label, or aria-labelledby required)');
+        }
+        
+        // aria-pressed state management
+        if (this.button.hasAttribute('aria-pressed')) {
+            const val = this.button.getAttribute('aria-pressed');
+            if (!['true', 'false', 'mixed', 'undefined'].includes(val)) {
+                errors.push(`Invalid aria-pressed value: ${val}`);
+            }
+        }
+        
+        // aria-expanded/controls
+        if (this.button.hasAttribute('aria-expanded')) {
+            // Optionally check for controlled element
+            // Could add logic to check for aria-controls
+        }
+        
+        // aria-describedby references
+        if (this.button.hasAttribute('aria-describedby')) {
+            const refError = this.checkAriaReferences('aria-describedby', this.button.getAttribute('aria-describedby'));
+            if (refError) errors.push(refError);
+        }
+        
+        return errors;
     }
 }
 
