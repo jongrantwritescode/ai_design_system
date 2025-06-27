@@ -1,6 +1,6 @@
 # Design System - Web Components
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-blue?style=flat-square)](https://jongrantwritescode.github.io/ai_design_system/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Storybook-blue?style=flat-square)](https://jongrantwritescode.github.io/ai_design_system/)
 
 A comprehensive design system built with native Web Components, featuring layout components and form elements with consistent styling and behavior.
 
@@ -95,10 +95,10 @@ Include the design system styles and components in your HTML:
 
 ## Documentation
 
-- **[Live Demo](https://jongrantwritescode.github.io/ai_design_system/)**: Interactive documentation and component showcase
-- **[Documentation](./docs/)**: Comprehensive documentation in the docs folder
-- **Storybook**: Interactive component documentation and testing
-- **JSDoc**: Comprehensive API documentation with examples
+- **[Storybook](https://jongrantwritescode.github.io/ai_design_system/)**: Interactive component documentation and testing
+- **[Examples](./examples/)**: Example implementations and use cases
+- **[JSDoc Documentation](./docs-output/)**: Comprehensive API documentation
+- **[Documentation](./docs/)**: Additional documentation in the docs folder
 
 ## Design Tokens
 
