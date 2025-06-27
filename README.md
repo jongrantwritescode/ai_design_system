@@ -1,5 +1,7 @@
 # Design System - Web Components
 
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-blue?style=flat-square)](https://jon.github.io/ai_design_system/)
+
 A comprehensive design system built with native Web Components, featuring layout components and form elements with consistent styling and behavior.
 
 ## Features
@@ -93,9 +95,10 @@ Include the design system styles and components in your HTML:
 
 ## Documentation
 
+- **[Live Demo](https://jon.github.io/ai_design_system/)**: Interactive documentation and component showcase
+- **[Documentation](./docs/)**: Comprehensive documentation in the docs folder
 - **Storybook**: Interactive component documentation and testing
 - **JSDoc**: Comprehensive API documentation with examples
-- **GitHub Pages**: Deployed documentation available at project URL
 
 ## Design Tokens
 
@@ -114,16 +117,20 @@ The design system uses CSS custom properties for consistent theming:
 ### Project Structure
 
 ```
-design-system-project/
-├── src/
+ai_design_system/
+├── src/                     # Source code and components
 │   ├── components/          # Web Components
-│   ├── design_system/
-│   │   └── styles.css       # Design tokens and base styles
+│   ├── design_system/       # Design tokens and base styles
 │   └── stories/             # Storybook stories
+├── docs/                    # Documentation
+├── plans/                   # Development plans and specifications
+├── tests/                   # Test files
+├── examples/                # Example implementations
 ├── .storybook/              # Storybook configuration
-├── docs-output/             # JSDoc documentation
-├── index.html               # Demo page
-├── package.json
+├── .github/                 # GitHub workflows and templates
+├── docs-output/             # JSDoc documentation output
+├── storybook-static/        # Built Storybook files
+├── node_modules/            # Dependencies
 └── README.md
 ```
 
