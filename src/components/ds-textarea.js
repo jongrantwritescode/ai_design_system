@@ -45,11 +45,26 @@
  * <!-- Disabled textarea -->
  * <ds-textarea value="Read-only content" disabled rows="3"></ds-textarea>
  */
+import BaseComponent from './base-component.js';
+
 class DsTextarea extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-textarea
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby',
+                'aria-required',
+                'aria-invalid'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+            tokenValidation: {
+                'aria-invalid': ['grammar', 'false', 'spelling', 'true']
+            }
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -70,228 +85,170 @@ class DsTextarea extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['value', 'placeholder', 'rows', 'cols', 'disabled', 'readonly', 'required', 'name', 'id']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'textarea',
+            ariaConfig,
+            events: ['input', 'change', 'focus', 'blur'],
+            observedAttributes: ['value', 'placeholder', 'rows', 'cols', 'disabled', 'readonly', 'required', 'name', 'id']
+        });
         
-        // Store reference to the internal textarea for attribute changes
         this.textarea = this.shadowRoot.querySelector('textarea');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return ['value', 'placeholder', 'rows', 'cols', 'disabled', 'readonly', 'required', 'name', 'id', 'aria-label', 'aria-describedby', 'aria-required', 'aria-invalid'];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             case 'value':
                 this.textarea.value = newValue || '';
                 break;
-                
             case 'placeholder':
                 this.textarea.placeholder = newValue || '';
                 break;
-                
             case 'rows':
                 this.textarea.rows = newValue || '';
                 break;
-                
             case 'cols':
                 this.textarea.cols = newValue || '';
                 break;
-                
             case 'disabled':
-                if (this.hasAttribute('disabled')) {
-                    this.textarea.disabled = true;
-                } else {
-                    this.textarea.disabled = false;
-                }
+                this.textarea.disabled = this.hasAttribute('disabled');
                 break;
-                
             case 'readonly':
-                if (this.hasAttribute('readonly')) {
-                    this.textarea.readOnly = true;
-                } else {
-                    this.textarea.readOnly = false;
-                }
+                this.textarea.readOnly = this.hasAttribute('readonly');
                 break;
-                
             case 'required':
-                if (this.hasAttribute('required')) {
-                    this.textarea.required = true;
-                } else {
-                    this.textarea.required = false;
-                }
+                this.textarea.required = this.hasAttribute('required');
                 break;
-                
             case 'name':
                 this.textarea.name = newValue || '';
                 break;
-                
             case 'id':
                 this.textarea.id = newValue || '';
                 break;
         }
     }
     
-    /**
-     * Sets up event listeners to re-dispatch events from the host element.
-     */
-    setupEventListeners() {
-        const events = ['input', 'change', 'focus', 'blur'];
-        
-        events.forEach(eventType => {
-            this.textarea.addEventListener(eventType, (event) => {
-                // Create a new event to dispatch from the host
-                const newEvent = new Event(eventType, {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true
-                });
-                
-                // Copy relevant properties
-                if (eventType === 'input' || eventType === 'change') {
-                    newEvent.target = this;
-                    newEvent.currentTarget = this;
-                }
-                
-                this.dispatchEvent(newEvent);
-            });
-        });
-    }
-    
-    /**
-     * Gets the current value of the textarea.
-     * @returns {string} The textarea's current value.
-     */
     get value() {
         return this.textarea.value;
     }
-    
-    /**
-     * Sets the value of the textarea.
-     * @param {string} val - The new value to set.
-     */
     set value(val) {
         this.textarea.value = val;
     }
-    
-    /**
-     * Gets the placeholder text of the textarea.
-     * @returns {string} The textarea's placeholder.
-     */
     get placeholder() {
         return this.textarea.placeholder;
     }
-    
-    /**
-     * Sets the placeholder text of the textarea.
-     * @param {string} val - The new placeholder to set.
-     */
     set placeholder(val) {
         this.textarea.placeholder = val;
     }
-    
-    /**
-     * Gets the number of rows in the textarea.
-     * @returns {number} The textarea's row count.
-     */
     get rows() {
         return this.textarea.rows;
     }
-    
-    /**
-     * Sets the number of rows in the textarea.
-     * @param {number} val - The new row count to set.
-     */
     set rows(val) {
         this.textarea.rows = val;
     }
-    
-    /**
-     * Gets the number of columns in the textarea.
-     * @returns {number} The textarea's column count.
-     */
     get cols() {
         return this.textarea.cols;
     }
-    
-    /**
-     * Sets the number of columns in the textarea.
-     * @param {number} val - The new column count to set.
-     */
     set cols(val) {
         this.textarea.cols = val;
     }
-    
-    /**
-     * Gets the disabled state of the textarea.
-     * @returns {boolean} Whether the textarea is disabled.
-     */
     get disabled() {
         return this.textarea.disabled;
     }
-    
-    /**
-     * Sets the disabled state of the textarea.
-     * @param {boolean} val - Whether to disable the textarea.
-     */
     set disabled(val) {
         this.textarea.disabled = val;
     }
-    
-    /**
-     * Gets the readonly state of the textarea.
-     * @returns {boolean} Whether the textarea is readonly.
-     */
     get readonly() {
         return this.textarea.readOnly;
     }
-    
-    /**
-     * Sets the readonly state of the textarea.
-     * @param {boolean} val - Whether to make the textarea readonly.
-     */
     set readonly(val) {
         this.textarea.readOnly = val;
     }
-    
-    /**
-     * Gets the required state of the textarea.
-     * @returns {boolean} Whether the textarea is required.
-     */
     get required() {
         return this.textarea.required;
     }
-    
-    /**
-     * Sets the required state of the textarea.
-     * @param {boolean} val - Whether to make the textarea required.
-     */
     set required(val) {
         this.textarea.required = val;
     }
-    
-    /**
-     * Gets the name of the textarea.
-     * @returns {string} The textarea's name.
-     */
     get name() {
         return this.textarea.name;
     }
-    
-    /**
-     * Sets the name of the textarea.
-     * @param {string} val - The new name to set.
-     */
     set name(val) {
         this.textarea.name = val;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.textarea.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.textarea.removeAttribute('aria-label');
+        } else {
+            this.textarea.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.textarea.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.textarea.removeAttribute('aria-describedby');
+        } else {
+            this.textarea.setAttribute('aria-describedby', val);
+        }
+    }
+    get ariaRequired() { 
+        const value = this.textarea.getAttribute('aria-required');
+        return value === null ? null : value;
+    }
+    set ariaRequired(val) { 
+        if (val === null || val === undefined) {
+            this.textarea.removeAttribute('aria-required');
+        } else {
+            this.textarea.setAttribute('aria-required', val);
+        }
+    }
+    get ariaInvalid() { 
+        const value = this.textarea.getAttribute('aria-invalid');
+        return value === null ? null : value;
+    }
+    set ariaInvalid(val) { 
+        if (val === null || val === undefined) {
+            this.textarea.removeAttribute('aria-invalid');
+        } else {
+            this.textarea.setAttribute('aria-invalid', val);
+        }
+    }
+    // Override validateARIA for textarea-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        const hostAriaLabel = this.getAttribute('aria-label');
+        const hostAriaLabelledBy = this.getAttribute('aria-labelledby');
+        const textareaAriaLabel = this.textarea.getAttribute('aria-label');
+        const textareaAriaLabelledBy = this.textarea.getAttribute('aria-labelledby');
+        const hasName = hostAriaLabel || hostAriaLabelledBy || textareaAriaLabel || textareaAriaLabelledBy;
+        if (!hasName) {
+            errors.push('Textarea has no accessible name (aria-label or aria-labelledby required)');
+        }
+        if (this.textarea.hasAttribute('aria-invalid')) {
+            const val = this.textarea.getAttribute('aria-invalid');
+            if (!['true', 'false', 'grammar', 'spelling'].includes(val)) {
+                errors.push(`Invalid aria-invalid value: ${val}`);
+            }
+        }
+        if (this.textarea.hasAttribute('aria-describedby')) {
+            const refError = this.checkAriaReferences('aria-describedby', this.textarea.getAttribute('aria-describedby'));
+            if (refError) errors.push(refError);
+        }
+        return errors;
     }
 }
 

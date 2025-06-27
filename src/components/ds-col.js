@@ -48,25 +48,31 @@
  *   <div>Item C</div>
  * </ds-col>
  */
+import BaseComponent from './base-component.js';
+
 class DsCol extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-col (none required, but allow aria-label/aria-describedby)
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
                 @import url('/src/design_system/styles.css');
-                
                 :host {
                     display: block; /* Custom elements are inline by default */
-                    /* Flex item properties will be applied by ds-row parent's context */
                 }
-                
                 .col-container {
                     display: flex; /* Make it a flex container for its own children */
                     flex-direction: column;
-                    /* Default flex-wrap for its own children */
                 }
             </style>
             <div class="col-container">
@@ -74,64 +80,60 @@ class DsCol extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, [
-            // Flex Item Properties (applied to :host)
-            'flex-grow', 'flex-shrink', 'flex-basis', 'align-self', 'order',
-            // Flex Container Properties (applied to .col-container)
-            'justify-content', 'align-items', 'gap', 'wrap'
-        ]);
+        super({
+            template: template.innerHTML,
+            targetSelector: '.col-container',
+            ariaConfig,
+            events: [],
+            observedAttributes: [
+                'flex-grow', 'flex-shrink', 'flex-basis', 'align-self', 'order',
+                'justify-content', 'align-items', 'gap', 'wrap',
+                'aria-label', 'aria-describedby'
+            ]
+        });
         
-        // Store reference to the internal container for attribute changes
         this.colContainer = this.shadowRoot.querySelector('.col-container');
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return [
+            'flex-grow', 'flex-shrink', 'flex-basis', 'align-self', 'order',
+            'justify-content', 'align-items', 'gap', 'wrap',
+            'aria-label', 'aria-describedby'
+        ];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             // Flex Item Properties (applied to :host)
             case 'flex-grow':
                 this.style.flexGrow = newValue || '';
                 break;
-                
             case 'flex-shrink':
                 this.style.flexShrink = newValue || '';
                 break;
-                
             case 'flex-basis':
                 this.style.flexBasis = newValue || '';
                 break;
-                
             case 'align-self':
                 this.style.alignSelf = newValue || '';
                 break;
-                
             case 'order':
                 this.style.order = newValue || '';
                 break;
-                
             // Flex Container Properties (applied to .col-container)
             case 'justify-content':
                 this.colContainer.style.justifyContent = newValue || '';
                 break;
-                
             case 'align-items':
                 this.colContainer.style.alignItems = newValue || '';
                 break;
-                
             case 'gap':
                 this.colContainer.style.gap = newValue || '';
                 break;
-                
             case 'wrap':
-                // Boolean attribute - check if present
                 if (this.hasAttribute('wrap')) {
                     this.colContainer.style.flexWrap = 'wrap';
                 } else {
@@ -140,6 +142,30 @@ class DsCol extends BaseComponent {
                 break;
         }
     }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.colContainer.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.colContainer.removeAttribute('aria-label');
+        } else {
+            this.colContainer.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.colContainer.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.colContainer.removeAttribute('aria-describedby');
+        } else {
+            this.colContainer.setAttribute('aria-describedby', val);
+        }
+    }
+    // Optionally override validateARIA if needed
 }
 
 // Register the custom element

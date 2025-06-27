@@ -40,11 +40,21 @@
  *   <ds-radio name="contact" value="mail" id="contact-mail">Mail</ds-radio>
  * </ds-fieldset>
  */
+import BaseComponent from './base-component.js';
+
 class DsLegend extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-legend
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -65,22 +75,58 @@ class DsLegend extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and no observed attributes
-        this.setupComponent(template, []);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'legend',
+            ariaConfig,
+            events: [],
+            observedAttributes: []
+        });
         
-        // Store reference to the internal legend for attribute changes
         this.legend = this.shadowRoot.querySelector('legend');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Sets up event listeners for the legend.
-     */
-    setupEventListeners() {
-        // Legends don't typically have interactive events
-        // But we can listen for form-related events if needed
+    static get observedAttributes() {
+        return ['aria-label', 'aria-describedby'];
+    }
+    
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.legend.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.legend.removeAttribute('aria-label');
+        } else {
+            this.legend.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.legend.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.legend.removeAttribute('aria-describedby');
+        } else {
+            this.legend.setAttribute('aria-describedby', val);
+        }
+    }
+    // Override validateARIA for legend-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        // Accessible name check: must have text or aria-label
+        const legendText = this.textContent.trim();
+        const ariaLabel = this.legend.getAttribute('aria-label');
+        if (!legendText && !ariaLabel) {
+            errors.push('Legend has no accessible name (text or aria-label required)');
+        }
+        return errors;
     }
 }
 

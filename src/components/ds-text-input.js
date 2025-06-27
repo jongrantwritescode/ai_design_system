@@ -43,11 +43,30 @@
  * <!-- Disabled email input with a pre-filled value -->
  * <ds-text-input type="email" value="example@domain.com" disabled></ds-text-input>
  */
+import BaseComponent from './base-component.js';
+
 class DsTextInput extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-text-input
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby',
+                'aria-required',
+                'aria-invalid',
+                'aria-autocomplete',
+                'aria-controls',
+                'aria-activedescendant'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby', 'aria-controls', 'aria-activedescendant'],
+            tokenValidation: {
+                'aria-autocomplete': ['inline', 'list', 'both', 'none'],
+                'aria-invalid': ['grammar', 'false', 'spelling', 'true']
+            }
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -67,180 +86,185 @@ class DsTextInput extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['type', 'value', 'placeholder', 'disabled', 'readonly', 'required', 'name', 'id', 'aria-label']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'input',
+            ariaConfig,
+            events: ['input', 'change', 'focus', 'blur'],
+            observedAttributes: ['type', 'value', 'placeholder', 'disabled', 'readonly', 'required', 'name', 'id']
+        });
         
-        // Store reference to the internal input for attribute changes
         this.input = this.shadowRoot.querySelector('input');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return ['type', 'value', 'placeholder', 'disabled', 'readonly', 'required', 'name', 'id', 'aria-label', 'aria-describedby', 'aria-required', 'aria-invalid', 'aria-autocomplete', 'aria-controls', 'aria-activedescendant'];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             case 'type':
                 this.input.type = newValue || 'text';
                 break;
-                
             case 'value':
                 this.input.value = newValue || '';
                 break;
-                
             case 'placeholder':
                 this.input.placeholder = newValue || '';
                 break;
-                
             case 'disabled':
-                if (this.hasAttribute('disabled')) {
-                    this.input.disabled = true;
-                } else {
-                    this.input.disabled = false;
-                }
+                this.input.disabled = this.hasAttribute('disabled');
                 break;
-                
             case 'readonly':
-                if (this.hasAttribute('readonly')) {
-                    this.input.readOnly = true;
-                } else {
-                    this.input.readOnly = false;
-                }
+                this.input.readOnly = this.hasAttribute('readonly');
                 break;
-                
             case 'required':
-                if (this.hasAttribute('required')) {
-                    this.input.required = true;
-                } else {
-                    this.input.required = false;
-                }
+                this.input.required = this.hasAttribute('required');
                 break;
-                
             case 'name':
                 this.input.name = newValue || '';
                 break;
-                
             case 'id':
                 this.input.id = newValue || '';
-                break;
-                
-            case 'aria-label':
-                this.input.setAttribute('aria-label', newValue || '');
                 break;
         }
     }
     
-    /**
-     * Sets up event listeners to re-dispatch events from the host element.
-     */
-    setupEventListeners() {
-        const events = ['input', 'change', 'focus', 'blur'];
-        
-        events.forEach(eventType => {
-            this.input.addEventListener(eventType, (event) => {
-                // Create a new event to dispatch from the host
-                const newEvent = new Event(eventType, {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true
-                });
-                
-                // Copy relevant properties
-                if (eventType === 'input' || eventType === 'change') {
-                    newEvent.target = this;
-                    newEvent.currentTarget = this;
-                }
-                
-                this.dispatchEvent(newEvent);
-            });
-        });
-    }
-    
-    /**
-     * Gets the current value of the input.
-     * @returns {string} The input's current value.
-     */
     get value() {
         return this.input.value;
     }
-    
-    /**
-     * Sets the value of the input.
-     * @param {string} val - The new value to set.
-     */
     set value(val) {
         this.input.value = val;
     }
-    
-    /**
-     * Gets the type of the input.
-     * @returns {string} The input's type.
-     */
     get type() {
         return this.input.type;
     }
-    
-    /**
-     * Sets the type of the input.
-     * @param {string} val - The new type to set.
-     */
     set type(val) {
         this.input.type = val;
     }
-    
-    /**
-     * Gets the disabled state of the input.
-     * @returns {boolean} Whether the input is disabled.
-     */
     get disabled() {
         return this.input.disabled;
     }
-    
-    /**
-     * Sets the disabled state of the input.
-     * @param {boolean} val - Whether to disable the input.
-     */
     set disabled(val) {
         this.input.disabled = val;
     }
-    
-    /**
-     * Gets the readonly state of the input.
-     * @returns {boolean} Whether the input is readonly.
-     */
     get readonly() {
         return this.input.readOnly;
     }
-    
-    /**
-     * Sets the readonly state of the input.
-     * @param {boolean} val - Whether to make the input readonly.
-     */
     set readonly(val) {
         this.input.readOnly = val;
     }
-    
-    /**
-     * Gets the required state of the input.
-     * @returns {boolean} Whether the input is required.
-     */
     get required() {
         return this.input.required;
     }
-    
-    /**
-     * Sets the required state of the input.
-     * @param {boolean} val - Whether to make the input required.
-     */
     set required(val) {
         this.input.required = val;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.input.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-label');
+        } else {
+            this.input.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.input.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-describedby');
+        } else {
+            this.input.setAttribute('aria-describedby', val);
+        }
+    }
+    get ariaRequired() { 
+        const value = this.input.getAttribute('aria-required');
+        return value === null ? null : value;
+    }
+    set ariaRequired(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-required');
+        } else {
+            this.input.setAttribute('aria-required', val);
+        }
+    }
+    get ariaInvalid() { 
+        const value = this.input.getAttribute('aria-invalid');
+        return value === null ? null : value;
+    }
+    set ariaInvalid(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-invalid');
+        } else {
+            this.input.setAttribute('aria-invalid', val);
+        }
+    }
+    get ariaAutocomplete() { 
+        const value = this.input.getAttribute('aria-autocomplete');
+        return value === null ? null : value;
+    }
+    set ariaAutocomplete(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-autocomplete');
+        } else {
+            this.input.setAttribute('aria-autocomplete', val);
+        }
+    }
+    get ariaControls() { 
+        const value = this.input.getAttribute('aria-controls');
+        return value === null ? null : value;
+    }
+    set ariaControls(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-controls');
+        } else {
+            this.input.setAttribute('aria-controls', val);
+        }
+    }
+    get ariaActiveDescendant() { 
+        const value = this.input.getAttribute('aria-activedescendant');
+        return value === null ? null : value;
+    }
+    set ariaActiveDescendant(val) { 
+        if (val === null || val === undefined) {
+            this.input.removeAttribute('aria-activedescendant');
+        } else {
+            this.input.setAttribute('aria-activedescendant', val);
+        }
+    }
+    // Override validateARIA for text input–specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        // Accessible name check - check host element's text content and ARIA attributes
+        const hostAriaLabel = this.getAttribute('aria-label');
+        const hostAriaLabelledBy = this.getAttribute('aria-labelledby');
+        const inputAriaLabel = this.input.getAttribute('aria-label');
+        const inputAriaLabelledBy = this.input.getAttribute('aria-labelledby');
+        const hasName = hostAriaLabel || hostAriaLabelledBy || inputAriaLabel || inputAriaLabelledBy;
+        if (!hasName) {
+            errors.push('Text input has no accessible name (aria-label or aria-labelledby required)');
+        }
+        // aria-invalid state management
+        if (this.input.hasAttribute('aria-invalid')) {
+            const val = this.input.getAttribute('aria-invalid');
+            if (!['true', 'false', 'grammar', 'spelling'].includes(val)) {
+                errors.push(`Invalid aria-invalid value: ${val}`);
+            }
+        }
+        // aria-describedby references
+        if (this.input.hasAttribute('aria-describedby')) {
+            const refError = this.checkAriaReferences('aria-describedby', this.input.getAttribute('aria-describedby'));
+            if (refError) errors.push(refError);
+        }
+        return errors;
     }
 }
 

@@ -41,16 +41,25 @@
  *   <ds-option value="books">Books</ds-option>
  * </ds-select>
  */
+import BaseComponent from './base-component.js';
+
 class DsOption extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-option
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
                 @import url('/src/design_system/styles.css');
-                
                 :host {
                     display: none; /* Hidden by default, shown when slotted into select */
                 }
@@ -62,109 +71,87 @@ class DsOption extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['value', 'disabled', 'selected']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'option',
+            ariaConfig,
+            events: [],
+            observedAttributes: ['value', 'disabled', 'selected']
+        });
         
-        // Store reference to the internal option for attribute changes
         this.option = this.shadowRoot.querySelector('option');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return ['value', 'disabled', 'selected', 'aria-label', 'aria-describedby'];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             case 'value':
                 this.option.value = newValue || '';
                 break;
-                
             case 'disabled':
-                if (this.hasAttribute('disabled')) {
-                    this.option.disabled = true;
-                } else {
-                    this.option.disabled = false;
-                }
+                this.option.disabled = this.hasAttribute('disabled');
                 break;
-                
             case 'selected':
-                if (this.hasAttribute('selected')) {
-                    this.option.selected = true;
-                } else {
-                    this.option.selected = false;
-                }
+                this.option.selected = this.hasAttribute('selected');
                 break;
         }
     }
-    
-    /**
-     * Sets up event listeners for the option.
-     */
-    setupEventListeners() {
-        // Options don't typically have interactive events, but we can listen for changes
-        this.option.addEventListener('change', (event) => {
-            const newEvent = new Event('change', {
-                bubbles: true,
-                composed: true,
-                cancelable: true
-            });
-            this.dispatchEvent(newEvent);
-        });
-    }
-    
-    /**
-     * Gets the value of the option.
-     * @returns {string} The option's value.
-     */
     get value() {
         return this.option.value;
     }
-    
-    /**
-     * Sets the value of the option.
-     * @param {string} val - The new value to set.
-     */
     set value(val) {
         this.option.value = val;
     }
-    
-    /**
-     * Gets the selected state of the option.
-     * @returns {boolean} Whether the option is selected.
-     */
     get selected() {
         return this.option.selected;
     }
-    
-    /**
-     * Sets the selected state of the option.
-     * @param {boolean} val - Whether to select the option.
-     */
     set selected(val) {
         this.option.selected = val;
     }
-    
-    /**
-     * Gets the disabled state of the option.
-     * @returns {boolean} Whether the option is disabled.
-     */
     get disabled() {
         return this.option.disabled;
     }
-    
-    /**
-     * Sets the disabled state of the option.
-     * @param {boolean} val - Whether to disable the option.
-     */
     set disabled(val) {
         this.option.disabled = val;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.option.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.option.removeAttribute('aria-label');
+        } else {
+            this.option.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.option.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.option.removeAttribute('aria-describedby');
+        } else {
+            this.option.setAttribute('aria-describedby', val);
+        }
+    }
+    // Override validateARIA for option-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        // Accessible name check: must have text or aria-label
+        const optionText = this.textContent.trim();
+        const ariaLabel = this.option.getAttribute('aria-label');
+        if (!optionText && !ariaLabel) {
+            errors.push('Option has no accessible name (text or aria-label required)');
+        }
+        return errors;
     }
 }
 

@@ -42,11 +42,28 @@
  * <!-- Disabled radio button -->
  * <ds-radio name="status" value="inactive" disabled>Inactive</ds-radio>
  */
+import BaseComponent from './base-component.js';
+
 class DsRadio extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-radio
+        const ariaConfig = {
+            staticAriaAttributes: { role: 'radio' },
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby',
+                'aria-required',
+                'aria-invalid',
+                'aria-checked'
+            ],
+            requiredAriaAttributes: [], // none required, but warn about missing labels
+            referenceAttributes: ['aria-describedby'],
+            tokenValidation: {
+                'aria-checked': ['true', 'false', 'mixed', 'undefined'],
+                'aria-invalid': ['true', 'false', 'grammar', 'spelling']
+            }
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -67,14 +84,23 @@ class DsRadio extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'input[type="radio"]',
+            ariaConfig,
+            events: ['change', 'focus', 'blur'],
+            observedAttributes: ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']
+        });
         
-        // Store reference to the internal radio for attribute changes
         this.radio = this.shadowRoot.querySelector('input[type="radio"]');
-        
-        // Set up event listeners
-        this.setupEventListeners();
+    }
+    
+    /**
+     * Defines which attributes the component observes for changes.
+     * @returns {Array<string>} An array of attribute names to observe.
+     */
+    static get observedAttributes() {
+        return ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id', 'aria-label', 'aria-describedby', 'aria-required', 'aria-invalid', 'aria-checked'];
     }
     
     /**
@@ -84,6 +110,9 @@ class DsRadio extends BaseComponent {
      * @param {string|null} newValue - The attribute's new value.
      */
     attributeChangedCallback(name, oldValue, newValue) {
+        // Call parent method first
+        super.attributeChangedCallback(name, oldValue, newValue);
+        
         if (oldValue === newValue) return; // No change
         
         switch (name) {
@@ -131,32 +160,6 @@ class DsRadio extends BaseComponent {
                 this.radio.id = newValue || '';
                 break;
         }
-    }
-    
-    /**
-     * Sets up event listeners to re-dispatch events from the host element.
-     */
-    setupEventListeners() {
-        const events = ['change', 'focus', 'blur'];
-        
-        events.forEach(eventType => {
-            this.radio.addEventListener(eventType, (event) => {
-                // Create a new event to dispatch from the host
-                const newEvent = new Event(eventType, {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true
-                });
-                
-                // Copy relevant properties
-                if (eventType === 'change') {
-                    newEvent.target = this;
-                    newEvent.currentTarget = this;
-                }
-                
-                this.dispatchEvent(newEvent);
-            });
-        });
     }
     
     /**
@@ -253,6 +256,97 @@ class DsRadio extends BaseComponent {
      */
     set required(val) {
         this.radio.required = val;
+    }
+
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.radio.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.radio.removeAttribute('aria-label');
+        } else {
+            this.radio.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.radio.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.radio.removeAttribute('aria-describedby');
+        } else {
+            this.radio.setAttribute('aria-describedby', val);
+        }
+    }
+    get ariaRequired() { 
+        const value = this.radio.getAttribute('aria-required');
+        return value === null ? null : value;
+    }
+    set ariaRequired(val) { 
+        if (val === null || val === undefined) {
+            this.radio.removeAttribute('aria-required');
+        } else {
+            this.radio.setAttribute('aria-required', val);
+        }
+    }
+    get ariaInvalid() { 
+        const value = this.radio.getAttribute('aria-invalid');
+        return value === null ? null : value;
+    }
+    set ariaInvalid(val) { 
+        if (val === null || val === undefined) {
+            this.radio.removeAttribute('aria-invalid');
+        } else {
+            this.radio.setAttribute('aria-invalid', val);
+        }
+    }
+    get ariaChecked() { 
+        const value = this.radio.getAttribute('aria-checked');
+        return value === null ? null : value;
+    }
+    set ariaChecked(val) { 
+        if (val === null || val === undefined) {
+            this.radio.removeAttribute('aria-checked');
+        } else {
+            this.radio.setAttribute('aria-checked', val);
+        }
+    }
+
+    // Override validateARIA for radio-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        
+        // Accessible name check - check host element's text content and ARIA attributes
+        const hostTextContent = this.textContent.trim();
+        const hostAriaLabel = this.getAttribute('aria-label');
+        const hostAriaLabelledBy = this.getAttribute('aria-labelledby');
+        const radioAriaLabel = this.radio.getAttribute('aria-label');
+        const radioAriaLabelledBy = this.radio.getAttribute('aria-labelledby');
+        
+        const hasName = hostTextContent || hostAriaLabel || hostAriaLabelledBy || radioAriaLabel || radioAriaLabelledBy;
+        
+        if (!hasName) {
+            errors.push('Radio has no accessible name (text, aria-label, or aria-labelledby required)');
+        }
+        
+        // aria-checked state management
+        if (this.radio.hasAttribute('aria-checked')) {
+            const val = this.radio.getAttribute('aria-checked');
+            if (!['true', 'false', 'mixed', 'undefined'].includes(val)) {
+                errors.push(`Invalid aria-checked value: ${val}`);
+            }
+        }
+        
+        // aria-describedby references
+        if (this.radio.hasAttribute('aria-describedby')) {
+            const refError = this.checkAriaReferences('aria-describedby', this.radio.getAttribute('aria-describedby'));
+            if (refError) errors.push(refError);
+        }
+        
+        return errors;
     }
 }
 

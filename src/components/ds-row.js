@@ -38,24 +38,31 @@
  * <div>Short Item 4</div>
  * </ds-row>
  */
+import BaseComponent from './base-component.js';
+
 class DsRow extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-row (none required, but allow aria-label/aria-describedby)
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
                 @import url('/src/design_system/styles.css');
-                
                 :host {
                     display: block; /* Custom elements are inline by default */
                 }
-                
                 .row-container {
                     display: flex;
                     flex-direction: row;
-                    /* Default flex-wrap will be controlled by attribute */
                 }
             </style>
             <div class="row-container">
@@ -63,37 +70,35 @@ class DsRow extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['justify-content', 'align-items', 'gap', 'wrap']);
+        super({
+            template: template.innerHTML,
+            targetSelector: '.row-container',
+            ariaConfig,
+            events: [],
+            observedAttributes: ['justify-content', 'align-items', 'gap', 'wrap']
+        });
         
-        // Store reference to the internal container for attribute changes
         this.rowContainer = this.shadowRoot.querySelector('.row-container');
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return ['justify-content', 'align-items', 'gap', 'wrap', 'aria-label', 'aria-describedby'];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             case 'justify-content':
                 this.rowContainer.style.justifyContent = newValue || '';
                 break;
-                
             case 'align-items':
                 this.rowContainer.style.alignItems = newValue || '';
                 break;
-                
             case 'gap':
                 this.rowContainer.style.gap = newValue || '';
                 break;
-                
             case 'wrap':
-                // Boolean attribute - check if present
                 if (this.hasAttribute('wrap')) {
                     this.rowContainer.style.flexWrap = 'wrap';
                 } else {
@@ -102,6 +107,30 @@ class DsRow extends BaseComponent {
                 break;
         }
     }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.rowContainer.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.rowContainer.removeAttribute('aria-label');
+        } else {
+            this.rowContainer.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.rowContainer.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.rowContainer.removeAttribute('aria-describedby');
+        } else {
+            this.rowContainer.setAttribute('aria-describedby', val);
+        }
+    }
+    // Optionally override validateARIA if needed
 }
 
 // Register the custom element

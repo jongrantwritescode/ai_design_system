@@ -61,7 +61,7 @@ class BaseComponent extends HTMLElement {
         template.innerHTML = `
             <style>
                 :host {
-                    display: ${this.options.display};
+                    display: ${this.options.display} !important;
                 }
             </style>
             ${this.options.template || '<slot></slot>'}
@@ -109,13 +109,16 @@ class BaseComponent extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return; // No change
         
+        // Handle ARIA attributes first
+        if ((this.ariaConfig.dynamicAriaAttributes || []).includes(name) || (this.ariaConfig.requiredAriaAttributes || []).includes(name)) {
+            const handler = BaseComponent.createAriaAttributeHandler(name);
+            handler.call(this, newValue);
+        }
+        
+        // Handle other attributes
         const handler = this.options.attributeHandlers[name];
         if (handler) {
             handler.call(this, newValue);
-        }
-        // If ARIA attribute, re-validate
-        if ((this.ariaConfig.dynamicAriaAttributes || []).includes(name) || (this.ariaConfig.requiredAriaAttributes || []).includes(name)) {
-            this.warnMissingARIA();
         }
     }
     
@@ -131,8 +134,11 @@ class BaseComponent extends HTMLElement {
         this.options.observedAttributes.forEach(attr => {
             this.attributeChangedCallback(attr, null, this.getAttribute(attr));
         });
-        // Warn about missing/invalid ARIA
-        this.warnMissingARIA();
+        
+        // Delay ARIA validation to ensure text content is available
+        setTimeout(() => {
+            this.warnMissingARIA();
+        }, 0);
     }
     
     /**

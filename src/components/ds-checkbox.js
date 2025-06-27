@@ -41,11 +41,28 @@
  * <ds-checkbox name="preferences" value="sms">SMS notifications</ds-checkbox>
  * <ds-checkbox name="preferences" value="push">Push notifications</ds-checkbox>
  */
+import BaseComponent from './base-component.js';
+
 class DsCheckbox extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-checkbox
+        const ariaConfig = {
+            staticAriaAttributes: { role: 'checkbox' },
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby',
+                'aria-required',
+                'aria-invalid',
+                'aria-checked'
+            ],
+            requiredAriaAttributes: [], // none required, but warn about missing labels
+            referenceAttributes: ['aria-describedby'],
+            tokenValidation: {
+                'aria-checked': ['true', 'false', 'mixed', 'undefined'],
+                'aria-invalid': ['true', 'false', 'grammar', 'spelling']
+            }
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -66,14 +83,23 @@ class DsCheckbox extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'input[type="checkbox"]',
+            ariaConfig,
+            events: ['change', 'focus', 'blur'],
+            observedAttributes: ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']
+        });
         
-        // Store reference to the internal checkbox for attribute changes
         this.checkbox = this.shadowRoot.querySelector('input[type="checkbox"]');
-        
-        // Set up event listeners
-        this.setupEventListeners();
+    }
+    
+    /**
+     * Defines which attributes the component observes for changes.
+     * @returns {Array<string>} An array of attribute names to observe.
+     */
+    static get observedAttributes() {
+        return ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id', 'aria-label', 'aria-describedby', 'aria-required', 'aria-invalid', 'aria-checked'];
     }
     
     /**
@@ -83,6 +109,9 @@ class DsCheckbox extends BaseComponent {
      * @param {string|null} newValue - The attribute's new value.
      */
     attributeChangedCallback(name, oldValue, newValue) {
+        // Call parent method first
+        super.attributeChangedCallback(name, oldValue, newValue);
+        
         if (oldValue === newValue) return; // No change
         
         switch (name) {
@@ -130,32 +159,6 @@ class DsCheckbox extends BaseComponent {
                 this.checkbox.id = newValue || '';
                 break;
         }
-    }
-    
-    /**
-     * Sets up event listeners to re-dispatch events from the host element.
-     */
-    setupEventListeners() {
-        const events = ['change', 'focus', 'blur'];
-        
-        events.forEach(eventType => {
-            this.checkbox.addEventListener(eventType, (event) => {
-                // Create a new event to dispatch from the host
-                const newEvent = new Event(eventType, {
-                    bubbles: true,
-                    composed: true,
-                    cancelable: true
-                });
-                
-                // Copy relevant properties
-                if (eventType === 'change') {
-                    newEvent.target = this;
-                    newEvent.currentTarget = this;
-                }
-                
-                this.dispatchEvent(newEvent);
-            });
-        });
     }
     
     /**
@@ -252,6 +255,97 @@ class DsCheckbox extends BaseComponent {
      */
     set required(val) {
         this.checkbox.required = val;
+    }
+
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.checkbox.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.checkbox.removeAttribute('aria-label');
+        } else {
+            this.checkbox.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.checkbox.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.checkbox.removeAttribute('aria-describedby');
+        } else {
+            this.checkbox.setAttribute('aria-describedby', val);
+        }
+    }
+    get ariaRequired() { 
+        const value = this.checkbox.getAttribute('aria-required');
+        return value === null ? null : value;
+    }
+    set ariaRequired(val) { 
+        if (val === null || val === undefined) {
+            this.checkbox.removeAttribute('aria-required');
+        } else {
+            this.checkbox.setAttribute('aria-required', val);
+        }
+    }
+    get ariaInvalid() { 
+        const value = this.checkbox.getAttribute('aria-invalid');
+        return value === null ? null : value;
+    }
+    set ariaInvalid(val) { 
+        if (val === null || val === undefined) {
+            this.checkbox.removeAttribute('aria-invalid');
+        } else {
+            this.checkbox.setAttribute('aria-invalid', val);
+        }
+    }
+    get ariaChecked() { 
+        const value = this.checkbox.getAttribute('aria-checked');
+        return value === null ? null : value;
+    }
+    set ariaChecked(val) { 
+        if (val === null || val === undefined) {
+            this.checkbox.removeAttribute('aria-checked');
+        } else {
+            this.checkbox.setAttribute('aria-checked', val);
+        }
+    }
+
+    // Override validateARIA for checkbox-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        
+        // Accessible name check - check host element's text content and ARIA attributes
+        const hostTextContent = this.textContent.trim();
+        const hostAriaLabel = this.getAttribute('aria-label');
+        const hostAriaLabelledBy = this.getAttribute('aria-labelledby');
+        const checkboxAriaLabel = this.checkbox.getAttribute('aria-label');
+        const checkboxAriaLabelledBy = this.checkbox.getAttribute('aria-labelledby');
+        
+        const hasName = hostTextContent || hostAriaLabel || hostAriaLabelledBy || checkboxAriaLabel || checkboxAriaLabelledBy;
+        
+        if (!hasName) {
+            errors.push('Checkbox has no accessible name (text, aria-label, or aria-labelledby required)');
+        }
+        
+        // aria-checked state management
+        if (this.checkbox.hasAttribute('aria-checked')) {
+            const val = this.checkbox.getAttribute('aria-checked');
+            if (!['true', 'false', 'mixed', 'undefined'].includes(val)) {
+                errors.push(`Invalid aria-checked value: ${val}`);
+            }
+        }
+        
+        // aria-describedby references
+        if (this.checkbox.hasAttribute('aria-describedby')) {
+            const refError = this.checkAriaReferences('aria-describedby', this.checkbox.getAttribute('aria-describedby'));
+            if (refError) errors.push(refError);
+        }
+        
+        return errors;
     }
 }
 

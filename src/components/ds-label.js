@@ -36,11 +36,21 @@
  * <ds-label for="agree-terms">I agree to the terms and conditions</ds-label>
  * <ds-checkbox id="agree-terms" name="agree" value="yes"></ds-checkbox>
  */
+import BaseComponent from './base-component.js';
+
 class DsLabel extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-label
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -61,25 +71,24 @@ class DsLabel extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and observed attributes
-        this.setupComponent(template, ['for']);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'label',
+            ariaConfig,
+            events: ['click'],
+            observedAttributes: ['for']
+        });
         
-        // Store reference to the internal label for attribute changes
         this.label = this.shadowRoot.querySelector('label');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Called when one of the component's observed attributes is added, removed, or changed.
-     * @param {string} name - The name of the attribute that changed.
-     * @param {string|null} oldValue - The attribute's old value.
-     * @param {string|null} newValue - The attribute's new value.
-     */
+    static get observedAttributes() {
+        return ['for', 'aria-label', 'aria-describedby'];
+    }
+    
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return; // No change
-        
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
         switch (name) {
             case 'for':
                 this.label.setAttribute('for', newValue || '');
@@ -87,35 +96,50 @@ class DsLabel extends BaseComponent {
         }
     }
     
-    /**
-     * Sets up event listeners for the label.
-     */
-    setupEventListeners() {
-        // Labels don't typically have interactive events, but we can listen for clicks
-        this.label.addEventListener('click', (event) => {
-            const newEvent = new Event('click', {
-                bubbles: true,
-                composed: true,
-                cancelable: true
-            });
-            this.dispatchEvent(newEvent);
-        });
-    }
-    
-    /**
-     * Gets the ID of the associated form control.
-     * @returns {string} The ID of the associated form control.
-     */
     get htmlFor() {
         return this.label.htmlFor;
     }
-    
-    /**
-     * Sets the ID of the associated form control.
-     * @param {string} val - The ID of the form control to associate with.
-     */
     set htmlFor(val) {
         this.label.htmlFor = val;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.label.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.label.removeAttribute('aria-label');
+        } else {
+            this.label.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.label.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.label.removeAttribute('aria-describedby');
+        } else {
+            this.label.setAttribute('aria-describedby', val);
+        }
+    }
+    // Override validateARIA for label-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        // Check for accessible association
+        const forAttr = this.label.getAttribute('for');
+        if (forAttr && !document.getElementById(forAttr)) {
+            errors.push(`Label 'for' attribute references missing element: ${forAttr}`);
+        }
+        // Accessible name check
+        const labelText = this.textContent.trim();
+        const ariaLabel = this.label.getAttribute('aria-label');
+        if (!labelText && !ariaLabel) {
+            errors.push('Label has no accessible name (text or aria-label required)');
+        }
+        return errors;
     }
 }
 

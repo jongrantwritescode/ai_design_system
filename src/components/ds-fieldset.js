@@ -39,11 +39,21 @@
  *   <ds-checkbox name="interests" value="reading" id="reading">Reading</ds-checkbox>
  * </ds-fieldset>
  */
+import BaseComponent from './base-component.js';
+
 class DsFieldset extends BaseComponent {
     constructor() {
-        super();
+        // ARIA config for ds-fieldset
+        const ariaConfig = {
+            staticAriaAttributes: {},
+            dynamicAriaAttributes: [
+                'aria-label',
+                'aria-describedby'
+            ],
+            requiredAriaAttributes: [],
+            referenceAttributes: ['aria-describedby'],
+        };
         
-        // Define the template with internal markup and styles
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -64,22 +74,58 @@ class DsFieldset extends BaseComponent {
             </div>
         `;
         
-        // Set up the component with template and no observed attributes
-        this.setupComponent(template, []);
+        super({
+            template: template.innerHTML,
+            targetSelector: 'fieldset',
+            ariaConfig,
+            events: [],
+            observedAttributes: []
+        });
         
-        // Store reference to the internal fieldset for attribute changes
         this.fieldset = this.shadowRoot.querySelector('fieldset');
-        
-        // Set up event listeners
-        this.setupEventListeners();
     }
     
-    /**
-     * Sets up event listeners for the fieldset.
-     */
-    setupEventListeners() {
-        // Fieldsets don't typically have interactive events
-        // But we can listen for form-related events if needed
+    static get observedAttributes() {
+        return ['aria-label', 'aria-describedby'];
+    }
+    
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (oldValue === newValue) return;
+    }
+    // ARIA property accessors
+    get ariaLabel() { 
+        const value = this.fieldset.getAttribute('aria-label');
+        return value === null ? null : value;
+    }
+    set ariaLabel(val) { 
+        if (val === null || val === undefined) {
+            this.fieldset.removeAttribute('aria-label');
+        } else {
+            this.fieldset.setAttribute('aria-label', val);
+        }
+    }
+    get ariaDescribedBy() { 
+        const value = this.fieldset.getAttribute('aria-describedby');
+        return value === null ? null : value;
+    }
+    set ariaDescribedBy(val) { 
+        if (val === null || val === undefined) {
+            this.fieldset.removeAttribute('aria-describedby');
+        } else {
+            this.fieldset.setAttribute('aria-describedby', val);
+        }
+    }
+    // Override validateARIA for fieldset-specific checks
+    validateARIA() {
+        const errors = super.validateARIA ? super.validateARIA() : [];
+        // Accessible name check: must have a legend or aria-label
+        const legend = this.fieldset.querySelector('legend,ds-legend');
+        const ariaLabel = this.fieldset.getAttribute('aria-label');
+        if (!legend && !ariaLabel) {
+            errors.push('Fieldset has no accessible name (legend or aria-label required)');
+        }
+        return errors;
     }
 }
 
