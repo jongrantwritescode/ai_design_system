@@ -1,0 +1,40 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          # Fetch more history for change detection
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests on changed files
+        run: npm test -- --changed
+        env:
+          # Set CI environment for better output
+          CI: true
+
+      # Fallback: Run all tests if no changes detected or if it's a push to main
+      - name: Run all tests (fallback)
+        if: github.event_name == 'push' || failure()
+        run: npm test
+        env:
+          CI: true
+
+      # This workflow does not use required status checks, so it will not block merging. 

@@ -1,0 +1,107 @@
+---
+description: 
+globs: *.test.js
+alwaysApply: false
+---
+Guidelines for LLM-Friendly JavaScript Unit Tests
+When generating or understanding JavaScript unit tests, an LLM should adhere to the following principles to ensure clarity, effectiveness, and maintainability. These guidelines focus on creating tests that are explicit about their intent and coverage.
+
+1. Focus on Public Interfaces Only
+Rule: Unit tests must only test public functions and methods of a module or class. Do not test private helper functions or internal implementation details.
+
+LLM Understanding: An LLM should identify functions explicitly exported (e.g., export function myFunc() {}, module.exports = { myFunc }) or methods on a class instance that are intended for external consumption. If a function is not exported or is prefixed with an underscore (common convention for private methods, though not enforced by JS), it should generally be considered private and not directly unit tested.
+
+Rationale: Testing public interfaces ensures that the tests validate the observable behavior of the code, rather than its internal mechanics. This makes tests more robust to refactoring and less brittle.
+
+2. Validate Return Values or Observable System Changes
+Rule: Each test case should assert either:
+
+The value returned by a function: For pure functions or methods that produce a direct output.
+
+The final, user-facing, or system-observable change: For functions with side effects (e.g., DOM manipulation, state updates, API calls).
+
+LLM Understanding:
+
+Return Values: The LLM should look for expect(func()).toBe(expectedValue) or similar assertions.
+
+System Changes:
+
+DOM Manipulation: Assertions should check the state of the DOM (e.g., expect(element.textContent).toBe('New Text'), expect(element.classList.contains('active')).toBe(true)).
+
+State Changes: Assertions should check the updated state of an object, class instance, or global variable (e.g., expect(myStore.state.itemCount).toBe(5)).
+
+Function Calls (Spies): For functions that call other functions (e.g., event handlers calling a service), use spies (e.g., jest.fn(), sinon.spy()) to assert that specific functions were called with the correct arguments (e.g., expect(myService.save).toHaveBeenCalledWith(data)). This tests the interaction rather than the internal logic of the called function.
+
+Rationale: This ensures tests are meaningful and verify the intended outcome or interaction, not just intermediate steps.
+
+3. Test for All Thrown Errors
+Rule: For functions that are expected to throw errors under specific conditions, unit tests must include assertions to confirm that the correct error type and/or message is thrown.
+
+LLM Understanding: The LLM should use expect().toThrow() or expect().toThrowError() methods provided by testing frameworks. It should identify scenarios (e.g., invalid input, missing arguments, boundary conditions) where an error is anticipated.
+
+Example: expect(() => myFunction(null)).toThrow('Invalid input');
+
+Example: expect(() => anotherFunction(arg)).toThrow(TypeError);
+
+Rationale: This ensures the robustness of the code and validates its error-handling mechanisms.
+
+4. Clear and Descriptive Test Naming
+Rule: Use describe blocks to group related tests for a specific function or module, and it or test blocks with highly descriptive names that clearly state what is being tested and under what conditions.
+
+LLM Understanding: The LLM should aim for names that read like a sentence.
+
+Good: it('should return the sum of two positive numbers')
+
+Bad: it('test 1')
+
+Rationale: Improves test readability and documentation, making it easy to understand test failures.
+
+5. Adhere to the Arrange-Act-Assert (AAA) Pattern
+Rule: Structure each test case explicitly into three parts:
+
+Arrange: Set up the test data, mocks, and initial state.
+
+Act: Execute the function or method being tested.
+
+Assert: Verify the outcome using assertions.
+
+LLM Understanding: The LLM should parse the test code and identify these distinct phases within each it block.
+
+Rationale: Promotes clarity, readability, and consistency across test suites.
+
+6. Isolate Tests (Use Mocks/Stubs)
+Rule: Tests should be isolated. If the unit under test depends on external services, databases, or complex components, mock or stub those dependencies to control their behavior and prevent side effects.
+
+LLM Understanding: The LLM should recognize jest.mock(), jest.spyOn(), sinon.stub(), etc., as mechanisms for isolation.
+
+Rationale: Ensures that a test only fails if the unit being tested has a bug, not because of issues in its dependencies.
+
+7. Keep Tests Minimal and Focused
+Rule: Each test case should ideally focus on one specific aspect or behavior of the function under test. Avoid combining multiple unrelated assertions into a single test.
+
+LLM Understanding: If an it block contains numerous, disparate assertions, the LLM should identify opportunities to split it into multiple, more focused tests.
+
+Rationale: When a test fails, it's immediately clear what specific behavior is broken.
+
+8. Readable and Maintainable Code
+Rule: Write test code that is as clean, concise, and readable as the production code it tests. Avoid unnecessary complexity or obscure patterns.
+
+LLM Understanding: The LLM should prioritize generating straightforward and idiomatic JavaScript test code.
+
+Rationale: Easier for humans (and other LLMs) to understand, debug, and maintain.
+
+9. Consistency in Framework Usage
+Rule: While flexible, an LLM should default to generating tests using widely adopted frameworks like Jest (recommended for React/Node.js environments) or Mocha/Chai (for broader JS environments), unless specified otherwise.
+
+LLM Understanding: Leverage the specific assertion syntax and utilities provided by the chosen framework.
+
+Rationale: Ensures compatibility and leverages common community knowledge.
+
+10. Consider Edge Cases and Boundary Conditions
+Rule: Beyond "happy path" scenarios, tests should cover edge cases, boundary conditions (e.g., zero, negative numbers, empty strings, null/undefined inputs), and error conditions.
+
+LLM Understanding: The LLM should proactively suggest and generate test cases for these less common, but critical, scenarios.
+
+Rationale: Improves the robustness and reliability of the code.
+
+By following these guidelines, LLMs can generate and comprehend JavaScript unit tests that are effective, maintainable, and aligned with industry best practices, leading to higher quality codebases.
