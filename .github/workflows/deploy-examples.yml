@@ -26,7 +26,7 @@ jobs:
       - name: Prepare examples
         run: |
           # Create a directory for the examples build
-          mkdir -p examples-build/examples
+          mkdir -p   examples-build/examples
           
           # Copy examples to the examples subdirectory
           cp -r examples/* examples-build/examples/
