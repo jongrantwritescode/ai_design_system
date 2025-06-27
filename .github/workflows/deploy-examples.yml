@@ -26,14 +26,14 @@ jobs:
       - name: Prepare examples
         run: |
           # Create a directory for the examples build
-          mkdir -p examples-build
+          mkdir -p examples-build/examples
           
-          # Copy examples to the build directory
-          cp -r examples/* examples-build/
+          # Copy examples to the examples subdirectory
+          cp -r examples/* examples-build/examples/
           
           # Copy the design system files needed by examples
-          mkdir -p examples-build/src
-          cp -r src/* examples-build/src/
+          mkdir -p examples-build/examples/src
+          cp -r src/* examples-build/examples/src/
       
       # Upload build artifacts
       - name: Upload build artifacts
