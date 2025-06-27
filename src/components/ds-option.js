@@ -7,7 +7,7 @@
  * and can be used as an alternative to native `<option>` elements.
  *
  * @element ds-option
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} value - The value of the option when selected.
  * @attr {boolean} disabled - If present, the option cannot be selected.
@@ -41,12 +41,9 @@
  *   <ds-option value="books">Books</ds-option>
  * </ds-select>
  */
-class DsOption extends HTMLElement {
+class DsOption extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -65,22 +62,14 @@ class DsOption extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['value', 'disabled', 'selected']);
         
         // Store reference to the internal option for attribute changes
-        this.option = shadowRoot.querySelector('option');
+        this.option = this.shadowRoot.querySelector('option');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['value', 'disabled', 'selected'];
     }
     
     /**
@@ -176,17 +165,6 @@ class DsOption extends HTMLElement {
      */
     set disabled(val) {
         this.option.disabled = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('selected', null, this.getAttribute('selected'));
     }
 }
 

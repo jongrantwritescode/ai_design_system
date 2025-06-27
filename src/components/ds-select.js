@@ -7,7 +7,7 @@
  * `<option>` elements and custom `<ds-option>` components.
  *
  * @element ds-select
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} value - The currently selected option's value.
  * @attr {boolean} disabled - If present, the select cannot be interacted with.
@@ -54,12 +54,9 @@
  *   <ds-option value="travel">Travel</ds-option>
  * </ds-select>
  */
-class DsSelect extends HTMLElement {
+class DsSelect extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -82,25 +79,17 @@ class DsSelect extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['value', 'disabled', 'required', 'name', 'multiple', 'size']);
         
         // Store reference to the internal select for attribute changes
-        this.select = shadowRoot.querySelector('select');
+        this.select = this.shadowRoot.querySelector('select');
         
         // Set up event listeners
         this.setupEventListeners();
         
         // Set up slot change listener to handle option projection
         this.setupSlotListener();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['value', 'disabled', 'required', 'name', 'multiple', 'size'];
     }
     
     /**
@@ -321,23 +310,6 @@ class DsSelect extends HTMLElement {
      */
     set size(val) {
         this.select.size = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes and handles option projection.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('required', null, this.getAttribute('required'));
-        this.attributeChangedCallback('name', null, this.getAttribute('name'));
-        this.attributeChangedCallback('multiple', null, this.getAttribute('multiple'));
-        this.attributeChangedCallback('size', null, this.getAttribute('size'));
-        
-        // Handle initial option projection
-        this.handleSlotChange();
     }
 }
 

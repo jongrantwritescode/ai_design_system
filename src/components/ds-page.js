@@ -7,7 +7,7 @@
  * and ensures proper viewport handling.
  *
  * @element ds-page
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @slot - Renders the main page content inside the page container.
  *
@@ -36,12 +36,9 @@
  *   </ds-row>
  * </ds-page>
  */
-class DsPage extends HTMLElement {
+class DsPage extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -70,28 +67,11 @@ class DsPage extends HTMLElement {
             </main>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and no observed attributes
+        this.setupComponent(template, []);
         
         // Store reference to the internal container
-        this.pageContainer = shadowRoot.querySelector('.page-container');
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return []; // No specific attributes to observe
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies any initial setup if needed.
-     */
-    connectedCallback() {
-        // No specific initialization needed for ds-page
-        // It's designed to be a simple wrapper
+        this.pageContainer = this.shadowRoot.querySelector('.page-container');
     }
 }
 

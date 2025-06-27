@@ -6,7 +6,7 @@
  * It leverages CSS Flexbox properties, exposing them as attributes for easy configuration.
  *
  * @element ds-row
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} justify-content - Aligns content along the main axis. Accepts CSS `justify-content` values (e.g., `flex-start`, `center`, `space-between`).
  * @attr {string} align-items - Aligns content along the cross axis. Accepts CSS `align-items` values (e.g., `stretch`, `center`, `flex-end`).
@@ -38,12 +38,9 @@
  * <div>Short Item 4</div>
  * </ds-row>
  */
-class DsRow extends HTMLElement {
+class DsRow extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -66,19 +63,11 @@ class DsRow extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['justify-content', 'align-items', 'gap', 'wrap']);
         
         // Store reference to the internal container for attribute changes
-        this.rowContainer = shadowRoot.querySelector('.row-container');
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['justify-content', 'align-items', 'gap', 'wrap'];
+        this.rowContainer = this.shadowRoot.querySelector('.row-container');
     }
     
     /**
@@ -112,18 +101,6 @@ class DsRow extends HTMLElement {
                 }
                 break;
         }
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial styles based on current attributes.
-     */
-    connectedCallback() {
-        // Apply initial styles for all observed attributes
-        this.attributeChangedCallback('justify-content', null, this.getAttribute('justify-content'));
-        this.attributeChangedCallback('align-items', null, this.getAttribute('align-items'));
-        this.attributeChangedCallback('gap', null, this.getAttribute('gap'));
-        this.attributeChangedCallback('wrap', null, this.getAttribute('wrap'));
     }
 }
 

@@ -7,7 +7,7 @@
  * to create explicit associations with form elements.
  *
  * @element ds-label
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} for - The ID of the form control this label is associated with.
  *
@@ -36,12 +36,9 @@
  * <ds-label for="agree-terms">I agree to the terms and conditions</ds-label>
  * <ds-checkbox id="agree-terms" name="agree" value="yes"></ds-checkbox>
  */
-class DsLabel extends HTMLElement {
+class DsLabel extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -64,22 +61,14 @@ class DsLabel extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['for']);
         
         // Store reference to the internal label for attribute changes
-        this.label = shadowRoot.querySelector('label');
+        this.label = this.shadowRoot.querySelector('label');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['for'];
     }
     
     /**
@@ -127,15 +116,6 @@ class DsLabel extends HTMLElement {
      */
     set htmlFor(val) {
         this.label.htmlFor = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('for', null, this.getAttribute('for'));
     }
 }
 

@@ -7,7 +7,7 @@
  * grouping that improves form organization and accessibility.
  *
  * @element ds-fieldset
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @slot - Renders form controls and other content within the fieldset.
  *
@@ -39,12 +39,9 @@
  *   <ds-checkbox name="interests" value="reading" id="reading">Reading</ds-checkbox>
  * </ds-fieldset>
  */
-class DsFieldset extends HTMLElement {
+class DsFieldset extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -67,22 +64,14 @@ class DsFieldset extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and no observed attributes
+        this.setupComponent(template, []);
         
         // Store reference to the internal fieldset for attribute changes
-        this.fieldset = shadowRoot.querySelector('fieldset');
+        this.fieldset = this.shadowRoot.querySelector('fieldset');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return []; // No specific attributes for fieldset
     }
     
     /**
@@ -91,15 +80,6 @@ class DsFieldset extends HTMLElement {
     setupEventListeners() {
         // Fieldsets don't typically have interactive events
         // But we can listen for form-related events if needed
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies any initial setup if needed.
-     */
-    connectedCallback() {
-        // No specific initialization needed for fieldset
-        // It's designed to be a simple wrapper
     }
 }
 

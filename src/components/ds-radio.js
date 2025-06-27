@@ -6,7 +6,7 @@
  * It maintains proper radio button behavior where only one option in a group can be selected.
  *
  * @element ds-radio
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} name - The name of the radio button group. All radio buttons with the same name form a group.
  * @attr {string} value - The value of the radio button when selected.
@@ -42,12 +42,9 @@
  * <!-- Disabled radio button -->
  * <ds-radio name="status" value="inactive" disabled>Inactive</ds-radio>
  */
-class DsRadio extends HTMLElement {
+class DsRadio extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -70,22 +67,14 @@ class DsRadio extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']);
         
         // Store reference to the internal radio for attribute changes
-        this.radio = shadowRoot.querySelector('input[type="radio"]');
+        this.radio = this.shadowRoot.querySelector('input[type="radio"]');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id'];
     }
     
     /**
@@ -264,21 +253,6 @@ class DsRadio extends HTMLElement {
      */
     set required(val) {
         this.radio.required = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('name', null, this.getAttribute('name'));
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('checked', null, this.getAttribute('checked'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('readonly', null, this.getAttribute('readonly'));
-        this.attributeChangedCallback('required', null, this.getAttribute('required'));
-        this.attributeChangedCallback('id', null, this.getAttribute('id'));
     }
 }
 

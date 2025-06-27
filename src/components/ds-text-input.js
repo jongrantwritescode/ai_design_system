@@ -7,7 +7,7 @@
  * within forms while leveraging the design system's styling.
  *
  * @element ds-text-input
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} [type="text"] - The type of input (e.g., `text`, `email`, `password`, `number`, `tel`, `url`, `search`).
  * @attr {string} value - The current value of the input.
@@ -43,12 +43,9 @@
  * <!-- Disabled email input with a pre-filled value -->
  * <ds-text-input type="email" value="example@domain.com" disabled></ds-text-input>
  */
-class DsTextInput extends HTMLElement {
+class DsTextInput extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -70,22 +67,14 @@ class DsTextInput extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['type', 'value', 'placeholder', 'disabled', 'readonly', 'required', 'name', 'id', 'aria-label']);
         
         // Store reference to the internal input for attribute changes
-        this.input = shadowRoot.querySelector('input');
+        this.input = this.shadowRoot.querySelector('input');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['type', 'value', 'placeholder', 'disabled', 'readonly', 'required', 'name', 'id', 'aria-label'];
     }
     
     /**
@@ -252,23 +241,6 @@ class DsTextInput extends HTMLElement {
      */
     set required(val) {
         this.input.required = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('type', null, this.getAttribute('type'));
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('placeholder', null, this.getAttribute('placeholder'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('readonly', null, this.getAttribute('readonly'));
-        this.attributeChangedCallback('required', null, this.getAttribute('required'));
-        this.attributeChangedCallback('name', null, this.getAttribute('name'));
-        this.attributeChangedCallback('id', null, this.getAttribute('id'));
-        this.attributeChangedCallback('aria-label', null, this.getAttribute('aria-label'));
     }
 }
 

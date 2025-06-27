@@ -6,7 +6,7 @@
  * It exposes both flex item properties (for positioning within parent rows) and flex container properties (for its own children).
  *
  * @element ds-col
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} flex-grow - Controls how much the item can grow relative to other flex items. Accepts CSS `flex-grow` values.
  * @attr {string} flex-shrink - Controls how much the item can shrink relative to other flex items. Accepts CSS `flex-shrink` values.
@@ -48,12 +48,9 @@
  *   <div>Item C</div>
  * </ds-col>
  */
-class DsCol extends HTMLElement {
+class DsCol extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -77,24 +74,16 @@ class DsCol extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
-        
-        // Store reference to the internal container for attribute changes
-        this.colContainer = shadowRoot.querySelector('.col-container');
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return [
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, [
             // Flex Item Properties (applied to :host)
             'flex-grow', 'flex-shrink', 'flex-basis', 'align-self', 'order',
             // Flex Container Properties (applied to .col-container)
             'justify-content', 'align-items', 'gap', 'wrap'
-        ];
+        ]);
+        
+        // Store reference to the internal container for attribute changes
+        this.colContainer = this.shadowRoot.querySelector('.col-container');
     }
     
     /**
@@ -150,23 +139,6 @@ class DsCol extends HTMLElement {
                 }
                 break;
         }
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial styles based on current attributes.
-     */
-    connectedCallback() {
-        // Apply initial styles for all observed attributes
-        this.attributeChangedCallback('flex-grow', null, this.getAttribute('flex-grow'));
-        this.attributeChangedCallback('flex-shrink', null, this.getAttribute('flex-shrink'));
-        this.attributeChangedCallback('flex-basis', null, this.getAttribute('flex-basis'));
-        this.attributeChangedCallback('align-self', null, this.getAttribute('align-self'));
-        this.attributeChangedCallback('order', null, this.getAttribute('order'));
-        this.attributeChangedCallback('justify-content', null, this.getAttribute('justify-content'));
-        this.attributeChangedCallback('align-items', null, this.getAttribute('align-items'));
-        this.attributeChangedCallback('gap', null, this.getAttribute('gap'));
-        this.attributeChangedCallback('wrap', null, this.getAttribute('wrap'));
     }
 }
 

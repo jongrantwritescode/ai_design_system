@@ -7,7 +7,7 @@
  * and proper event handling.
  *
  * @element ds-button
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} [type="button"] - The type of button (e.g., `button`, `submit`, `reset`).
  * @attr {boolean} disabled - If present, the button cannot be interacted with.
@@ -37,12 +37,9 @@
  * <!-- Disabled button -->
  * <ds-button disabled variant="secondary">Disabled Button</ds-button>
  */
-class DsButton extends HTMLElement {
+class DsButton extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -65,22 +62,14 @@ class DsButton extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['type', 'disabled', 'name', 'value', 'variant']);
         
         // Store reference to the internal button for attribute changes
-        this.button = shadowRoot.querySelector('button');
+        this.button = this.shadowRoot.querySelector('button');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['type', 'disabled', 'name', 'value', 'variant'];
     }
     
     /**
@@ -226,19 +215,6 @@ class DsButton extends HTMLElement {
         } else {
             this.removeAttribute('variant');
         }
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('type', null, this.getAttribute('type'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('name', null, this.getAttribute('name'));
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('variant', null, this.getAttribute('variant'));
     }
 }
 

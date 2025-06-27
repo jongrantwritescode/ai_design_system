@@ -7,7 +7,7 @@
  * `<ds-fieldset>` components to describe the group of form controls.
  *
  * @element ds-legend
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @slot - Renders the legend text content.
  *
@@ -40,12 +40,9 @@
  *   <ds-radio name="contact" value="mail" id="contact-mail">Mail</ds-radio>
  * </ds-fieldset>
  */
-class DsLegend extends HTMLElement {
+class DsLegend extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -68,22 +65,14 @@ class DsLegend extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and no observed attributes
+        this.setupComponent(template, []);
         
         // Store reference to the internal legend for attribute changes
-        this.legend = shadowRoot.querySelector('legend');
+        this.legend = this.shadowRoot.querySelector('legend');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return []; // No specific attributes for legend
     }
     
     /**
@@ -92,15 +81,6 @@ class DsLegend extends HTMLElement {
     setupEventListeners() {
         // Legends don't typically have interactive events
         // But we can listen for form-related events if needed
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies any initial setup if needed.
-     */
-    connectedCallback() {
-        // No specific initialization needed for legend
-        // It's designed to be a simple wrapper
     }
 }
 

@@ -6,7 +6,7 @@
  * It supports both single checkboxes and groups of checkboxes for multiple selections.
  *
  * @element ds-checkbox
- * @extends HTMLElement
+ * @extends BaseComponent
  *
  * @attr {string} name - The name of the checkbox, used when submitting form data.
  * @attr {string} value - The value of the checkbox when checked.
@@ -41,12 +41,9 @@
  * <ds-checkbox name="preferences" value="sms">SMS notifications</ds-checkbox>
  * <ds-checkbox name="preferences" value="push">Push notifications</ds-checkbox>
  */
-class DsCheckbox extends HTMLElement {
+class DsCheckbox extends BaseComponent {
     constructor() {
         super();
-        
-        // Attach shadow root with open mode for experimentation
-        const shadowRoot = this.attachShadow({ mode: 'open' });
         
         // Define the template with internal markup and styles
         const template = document.createElement('template');
@@ -69,22 +66,14 @@ class DsCheckbox extends HTMLElement {
             </div>
         `;
         
-        // Append the template's content to the shadow root
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        // Set up the component with template and observed attributes
+        this.setupComponent(template, ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id']);
         
         // Store reference to the internal checkbox for attribute changes
-        this.checkbox = shadowRoot.querySelector('input[type="checkbox"]');
+        this.checkbox = this.shadowRoot.querySelector('input[type="checkbox"]');
         
         // Set up event listeners
         this.setupEventListeners();
-    }
-    
-    /**
-     * Defines which attributes the component observes for changes.
-     * @returns {Array<string>} An array of attribute names to observe.
-     */
-    static get observedAttributes() {
-        return ['name', 'value', 'checked', 'disabled', 'readonly', 'required', 'id'];
     }
     
     /**
@@ -263,21 +252,6 @@ class DsCheckbox extends HTMLElement {
      */
     set required(val) {
         this.checkbox.required = val;
-    }
-    
-    /**
-     * Called when the element is connected to the DOM.
-     * Applies initial attributes.
-     */
-    connectedCallback() {
-        // Apply initial attributes
-        this.attributeChangedCallback('name', null, this.getAttribute('name'));
-        this.attributeChangedCallback('value', null, this.getAttribute('value'));
-        this.attributeChangedCallback('checked', null, this.getAttribute('checked'));
-        this.attributeChangedCallback('disabled', null, this.getAttribute('disabled'));
-        this.attributeChangedCallback('readonly', null, this.getAttribute('readonly'));
-        this.attributeChangedCallback('required', null, this.getAttribute('required'));
-        this.attributeChangedCallback('id', null, this.getAttribute('id'));
     }
 }
 
