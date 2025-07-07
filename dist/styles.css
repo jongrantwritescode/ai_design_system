@@ -1,0 +1,182 @@
+/* CSS Reset/Normalization */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Design Tokens (CSS Variables) */
+:root {
+    /* Spacing */
+    --ds-spacing-xxs: 4px;
+    --ds-spacing-xs: 8px;
+    --ds-spacing-sm: 12px;
+    --ds-spacing-md: 16px;
+    --ds-spacing-lg: 24px;
+    --ds-spacing-xl: 32px;
+    --ds-spacing-xxl: 48px;
+    --ds-spacing-page-padding: var(--ds-spacing-lg); /* Default page padding */
+
+    /* Colors */
+    --ds-color-primary: #007bff;
+    --ds-color-secondary: #6c757d;
+    --ds-color-text: #333;
+    --ds-color-background: #f8f9fa;
+
+    /* Typography */
+    --ds-font-family-body: sans-serif;
+    --ds-font-family-heading: serif;
+    --ds-font-size-base: 16px;
+
+    /* Page specific */
+    --ds-page-max-width: 1200px;
+
+    /* Form Colors */
+    --ds-form-border-color: #ccc;
+    --ds-form-focus-color: var(--ds-color-primary);
+    --ds-form-error-color: #dc3545;
+    --ds-form-bg-color: white;
+    --ds-form-disabled-bg-color: #e9ecef;
+    --ds-form-text-color: var(--ds-color-text);
+
+    /* Form Spacing & Sizing */
+    --ds-form-input-padding: 8px 12px;
+    --ds-form-border-radius: 4px;
+    --ds-form-line-height: 1.5;
+}
+
+/* Global base styles */
+html {
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-base);
+    line-height: 1.5;
+    color: var(--ds-color-text);
+    background-color: var(--ds-color-background);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Utility classes */
+.ds-text-center {
+    text-align: center;
+}
+
+.ds-text-left {
+    text-align: left;
+}
+
+.ds-text-right {
+    text-align: right;
+}
+
+.ds-margin-0 {
+    margin: 0;
+}
+
+.ds-padding-0 {
+    padding: 0;
+}
+
+/* Form Element Base Styles */
+input[part="input"],
+textarea[part="textarea"],
+select[part="select"] {
+    width: 100%;
+    padding: var(--ds-form-input-padding);
+    border: 1px solid var(--ds-form-border-color);
+    border-radius: var(--ds-form-border-radius);
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-base);
+    line-height: var(--ds-form-line-height);
+    background-color: var(--ds-form-bg-color);
+    color: var(--ds-form-text-color);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease-in-out;
+}
+
+input[part="input"]:focus,
+textarea[part="textarea"]:focus,
+select[part="select"]:focus {
+    outline: none;
+    border-color: var(--ds-form-focus-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+input[part="input"]:disabled,
+textarea[part="textarea"]:disabled,
+select[part="select"]:disabled {
+    background-color: var(--ds-form-disabled-bg-color);
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+input[part="input"]:read-only,
+textarea[part="textarea"]:read-only {
+    background-color: var(--ds-form-disabled-bg-color);
+}
+
+/* Button Styles */
+button[part="button"] {
+    padding: var(--ds-form-input-padding);
+    border: 1px solid var(--ds-form-border-color);
+    border-radius: var(--ds-form-border-radius);
+    font-family: var(--ds-font-family-body);
+    font-size: var(--ds-font-size-base);
+    line-height: var(--ds-form-line-height);
+    background-color: var(--ds-form-bg-color);
+    color: var(--ds-form-text-color);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+button[part="button"]:hover {
+    background-color: #e9ecef;
+}
+
+button[part="button"]:focus {
+    outline: none;
+    border-color: var(--ds-form-focus-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+button[part="button"]:disabled {
+    background-color: var(--ds-form-disabled-bg-color);
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Radio and Checkbox Styles */
+input[part="radio"],
+input[part="checkbox"] {
+    margin-right: var(--ds-spacing-xs);
+}
+
+/* Label Styles */
+label[part="label"] {
+    display: block;
+    margin-bottom: var(--ds-spacing-xs);
+    font-weight: 500;
+    color: var(--ds-form-text-color);
+}
+
+/* Fieldset and Legend Styles */
+fieldset[part="fieldset"] {
+    border: 1px solid var(--ds-form-border-color);
+    border-radius: var(--ds-form-border-radius);
+    padding: var(--ds-spacing-md);
+    margin: var(--ds-spacing-md) 0;
+}
+
+legend[part="legend"] {
+    padding: 0 var(--ds-spacing-xs);
+    font-weight: 600;
+    color: var(--ds-form-text-color);
+}
+
+/* Option Styles */
+option[part="option"] {
+    padding: var(--ds-spacing-xs);
+} 

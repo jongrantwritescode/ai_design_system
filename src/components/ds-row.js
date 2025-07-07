@@ -134,4 +134,7 @@ class DsRow extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-row', DsRow); 
+customElements.define('ds-row', DsRow);
+
+// Export for use in other modules
+export default DsRow; 

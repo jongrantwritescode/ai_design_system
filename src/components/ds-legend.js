@@ -131,4 +131,7 @@ class DsLegend extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-legend', DsLegend); 
+customElements.define('ds-legend', DsLegend);
+
+// Export for use in other modules
+export default DsLegend; 

@@ -351,4 +351,7 @@ class DsRadio extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-radio', DsRadio); 
+customElements.define('ds-radio', DsRadio);
+
+// Export for use in other modules
+export default DsRadio; 

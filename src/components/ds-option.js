@@ -156,4 +156,7 @@ class DsOption extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-option', DsOption); 
+customElements.define('ds-option', DsOption);
+
+// Export for use in other modules
+export default DsOption; 

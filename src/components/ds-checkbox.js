@@ -350,4 +350,7 @@ class DsCheckbox extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-checkbox', DsCheckbox); 
+customElements.define('ds-checkbox', DsCheckbox);
+
+// Export for use in other modules
+export default DsCheckbox; 

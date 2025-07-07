@@ -253,4 +253,7 @@ class DsTextarea extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-textarea', DsTextarea); 
+customElements.define('ds-textarea', DsTextarea);
+
+// Export for use in other modules
+export default DsTextarea; 

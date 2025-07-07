@@ -317,4 +317,7 @@ class DsButton extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-button', DsButton); 
+customElements.define('ds-button', DsButton);
+
+// Export for use in other modules
+export default DsButton; 

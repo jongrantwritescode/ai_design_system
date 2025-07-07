@@ -314,4 +314,7 @@ class DsSelect extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-select', DsSelect); 
+customElements.define('ds-select', DsSelect);
+
+// Export for use in other modules
+export default DsSelect; 

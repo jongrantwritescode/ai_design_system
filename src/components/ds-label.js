@@ -144,4 +144,7 @@ class DsLabel extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-label', DsLabel); 
+customElements.define('ds-label', DsLabel);
+
+// Export for use in other modules
+export default DsLabel; 

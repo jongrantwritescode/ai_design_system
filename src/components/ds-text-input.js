@@ -269,4 +269,7 @@ class DsTextInput extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-text-input', DsTextInput); 
+customElements.define('ds-text-input', DsTextInput);
+
+// Export for use in other modules
+export default DsTextInput; 

@@ -1,0 +1,12 @@
+{
+  "name": "standards-ui-examples",
+  "version": "1.0.0",
+  "description": "Examples demonstrating the standards-ui design system",
+  "type": "module",
+  "scripts": {
+    "install-deps": "npm install standards-ui"
+  },
+  "dependencies": {
+    "standards-ui": "^1.0.0"
+  }
+} 

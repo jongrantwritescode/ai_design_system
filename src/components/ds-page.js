@@ -76,4 +76,7 @@ class DsPage extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-page', DsPage); 
+customElements.define('ds-page', DsPage);
+
+// Export for use in other modules
+export default DsPage; 

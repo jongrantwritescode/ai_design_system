@@ -130,4 +130,7 @@ class DsFieldset extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-fieldset', DsFieldset); 
+customElements.define('ds-fieldset', DsFieldset);
+
+// Export for use in other modules
+export default DsFieldset; 

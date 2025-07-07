@@ -1,9 +1,27 @@
 {
-  "name": "ai-design-system",
+  "name": "standards-ui",
   "version": "1.0.0",
   "description": "A foundational design system built with native Web Components",
-  "main": "index.html",
+  "main": "dist/standards-ui.js",
+  "module": "dist/standards-ui.esm.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/standards-ui.esm.js",
+      "require": "./dist/standards-ui.js"
+    },
+    "./styles": "./dist/styles.css"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "npm run build:components && npm run build:styles",
+    "build:components": "rollup -c rollup.config.js",
+    "build:styles": "cp src/styles/styles.css dist/styles.css",
+    "prepublishOnly": "npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "generate-docs": "jsdoc -c jsdoc.json",
@@ -15,23 +33,37 @@
   "keywords": [
     "web-components",
     "design-system",
-    "flexbox",
-    "layout"
+    "ui-components",
+    "form-components",
+    "standards",
+    "accessible",
+    "aria-compliant"
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/standards-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/standards-ui/issues"
+  },
+  "homepage": "https://github.com/yourusername/standards-ui#readme",
   "dependencies": {
     "storybook": "^8.6.14"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/web-components": "^8.6.14",
     "@storybook/web-components-webpack5": "^8.6.14",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.4.2",
+    "@vitest/ui": "^2.1.8",
     "jsdoc": "^4.0.2",
     "jsdom": "^24.0.0",
-    "vitest": "^2.1.8",
-    "@vitest/ui": "^2.1.8"
+    "rollup": "^4.0.0",
+    "vitest": "^2.1.8"
   }
 }

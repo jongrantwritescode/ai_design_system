@@ -169,4 +169,7 @@ class DsCol extends BaseComponent {
 }
 
 // Register the custom element
-customElements.define('ds-col', DsCol); 
+customElements.define('ds-col', DsCol);
+
+// Export for use in other modules
+export default DsCol; 
