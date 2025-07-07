@@ -54,6 +54,8 @@
  *   <ds-option value="travel">Travel</ds-option>
  * </ds-select>
  */
+import BaseComponent from './base-component.js';
+
 class DsSelect extends BaseComponent {
     constructor() {
         super();

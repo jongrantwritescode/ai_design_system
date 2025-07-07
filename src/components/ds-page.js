@@ -36,6 +36,8 @@
  *   </ds-row>
  * </ds-page>
  */
+import BaseComponent from './base-component.js';
+
 class DsPage extends BaseComponent {
     constructor() {
         super();

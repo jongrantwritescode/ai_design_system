@@ -90,8 +90,13 @@ class BaseComponent extends HTMLElement {
                 
                 // Copy relevant properties for form events
                 if (eventType === 'input' || eventType === 'change') {
-                    newEvent.target = this;
-                    newEvent.currentTarget = this;
+                    // Don't try to set read-only properties in test environment
+                    try {
+                        Object.defineProperty(newEvent, 'target', { value: this, writable: false });
+                        Object.defineProperty(newEvent, 'currentTarget', { value: this, writable: false });
+                    } catch (e) {
+                        // Ignore errors in test environment where properties are read-only
+                    }
                 }
                 
                 this.dispatchEvent(newEvent);

@@ -18,6 +18,7 @@ import './components/ds-option.js';
 import './components/ds-label.js';
 import './components/ds-fieldset.js';
 import './components/ds-legend.js';
+import './components/ds-form.js';
 
 // Export component classes for advanced usage
 export { default as DsPage } from './components/ds-page.js';
@@ -33,6 +34,7 @@ export { default as DsOption } from './components/ds-option.js';
 export { default as DsLabel } from './components/ds-label.js';
 export { default as DsFieldset } from './components/ds-fieldset.js';
 export { default as DsLegend } from './components/ds-legend.js';
+export { default as DsForm } from './components/ds-form.js';
 
 // Export the base component for custom component development
 export { default as BaseComponent } from './components/base-component.js';
