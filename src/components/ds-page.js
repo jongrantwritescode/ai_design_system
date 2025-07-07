@@ -44,7 +44,7 @@ class DsPage extends BaseComponent {
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
-                @import url('/src/design_system/styles.css');
+                @import url('/src/styles/styles.css');
                 
                 :host {
                     display: block; /* Custom elements are inline by default */

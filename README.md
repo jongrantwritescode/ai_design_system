@@ -72,7 +72,7 @@ Include the design system styles and components in your HTML:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="src/design_system/styles.css">
+    <link rel="stylesheet" href="src/styles/styles.css">
 </head>
 <body>
     <!-- Import components -->

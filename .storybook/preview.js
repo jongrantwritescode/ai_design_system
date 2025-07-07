@@ -1,4 +1,4 @@
-import '../src/design_system/styles.css';
+import '../src/styles/styles.css';
 
 /** @type { import('@storybook/web-components').Preview } */
 const preview = {
