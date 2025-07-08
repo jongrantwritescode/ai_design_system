@@ -15,25 +15,6 @@
             padding: 0;
         }
         
-        .example-link {
-            display: block;
-            padding: 16px;
-            margin: 8px 0;
-            background: white;
-            border: 1px solid var(--ds-form-border-color);
-            border-radius: var(--ds-form-border-radius);
-            text-decoration: none;
-            color: var(--ds-color-primary);
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .example-link:hover {
-            background-color: var(--ds-color-primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
         .example-title {
             font-size: 1.2em;
             font-weight: 600;
@@ -53,6 +34,7 @@
 <body>
     <!-- Import design system components -->
     <script type="module" src="node_modules/standards-ui/dist/standards-ui.esm.js"></script>
+    <script type="module" src="../src/components/ds-card.js"></script>
 
     <ds-page>
         <ds-row justify-content="center" style="margin: 48px 0;">
@@ -66,14 +48,23 @@
                 </p>
                 
                 <ds-col gap="16px">
-                    <a href="login-signup-form/index.html" class="example-link">
-                        <div class="example-title">Login / Sign Up Form</div>
-                        <div class="example-description">
-                            A dynamic form that switches between login and sign-up states with client-side validation, 
-                            demonstrating form components, state management, and user interaction patterns.
-                        </div>
+                    <a href="login-signup-form/index.html" style="text-decoration:none;">
+                        <ds-card>
+                            <div class="example-title">Login / Sign Up Form</div>
+                            <div class="example-description">
+                                A dynamic form that switches between login and sign-up states with client-side validation, 
+                                demonstrating form components, state management, and user interaction patterns.
+                            </div>
+                        </ds-card>
                     </a>
-                    
+                    <a href="custom-tokens/index.html" style="text-decoration:none;">
+                        <ds-card>
+                            <div class="example-title">Custom Design Tokens Example</div>
+                            <div class="example-description">
+                                Demonstrates initializing the design system with custom tokens, theme switching, and live token preview.
+                            </div>
+                        </ds-card>
+                    </a>
                     <!-- Future examples can be added here -->
                     <div style="text-align: center; padding: 32px; color: var(--ds-color-secondary); font-style: italic;">
                         More examples coming soon...

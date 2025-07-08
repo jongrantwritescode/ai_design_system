@@ -15,15 +15,6 @@
             padding: 0;
         }
         
-        .form-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 32px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
         .form-header {
             text-align: center;
             margin-bottom: 32px;
@@ -93,13 +84,14 @@
 <body>
     <!-- Import all design system components -->
     <script type="module" src="../node_modules/standards-ui/dist/standards-ui.esm.js"></script>
+    <script type="module" src="../../src/components/ds-card.js"></script>
 
     <ds-page>
         <ds-row justify-content="center" style="margin: 48px 0;">
             <ds-col flex-basis="500px">
                 <a href="../main.html" class="back-link">← Back to Examples</a>
                 
-                <div class="form-container">
+                <ds-card>
                     <div class="form-header">
                         <h1 class="form-title" id="formTitle">Login</h1>
                         <p class="form-subtitle" id="formSubtitle">Enter your credentials to access your account</p>
@@ -170,7 +162,7 @@
                             Don't have an account? Sign up
                         </button>
                     </div>
-                </div>
+                </ds-card>
             </ds-col>
         </ds-row>
     </ds-page>

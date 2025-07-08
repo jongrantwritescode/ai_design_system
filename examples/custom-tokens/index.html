@@ -21,14 +21,6 @@
             padding: var(--ds-spacing-lg);
         }
         
-        .token-preview {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: var(--ds-spacing-md);
-            margin: var(--ds-spacing-md) 0;
-        }
-        
         .color-swatch {
             display: inline-block;
             width: 40px;
@@ -61,6 +53,7 @@
 <body>
     <!-- Import design system -->
     <script type="module" src="../../dist/standards-ui.esm.js"></script>
+    <script type="module" src="../../src/components/ds-card.js"></script>
 
     <ds-page>
         <div class="example-container">
@@ -73,10 +66,10 @@
             </div>
             
             <!-- Token Preview -->
-            <div class="token-preview">
+            <ds-card>
                 <h3>Current Design Tokens</h3>
                 <div id="tokenDisplay"></div>
-            </div>
+            </ds-card>
             
             <!-- Component Examples -->
             <h2>Component Examples</h2>
