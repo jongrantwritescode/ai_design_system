@@ -26,9 +26,9 @@
     "build-storybook": "storybook build",
     "generate-docs": "jsdoc -c jsdoc.json",
     "serve-docs": "npm run generate-docs && python3 -m http.server 8080 --directory docs-output & sleep 2 && open http://localhost:8080",
-    "test": "vitest",
+    "test": "vitest run",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:watch": "vitest"
   },
   "keywords": [
     "web-components",

@@ -515,36 +515,34 @@ class DsForm extends BaseComponent {
             if (!name) return;
             
             let value = '';
+            let isCheckbox = false;
+            let isRadio = false;
+            let isChecked = false;
+            const tag = control.tagName.toLowerCase();
             
-            if (control.tagName && control.tagName.toLowerCase().includes('ds-')) {
-                // Design system components
-                if (control.type === 'checkbox') {
-                    if (control.checked) {
-                        value = control.value || 'on';
-                    }
-                } else if (control.type === 'radio') {
-                    if (control.checked) {
-                        value = control.value || 'on';
-                    }
-                } else {
-                    value = control.value || '';
-                }
-            } else {
-                // Native form elements
-                if (control.type === 'checkbox') {
-                    if (control.checked) {
-                        value = control.value || 'on';
-                    }
-                } else if (control.type === 'radio') {
-                    if (control.checked) {
-                        value = control.value || 'on';
-                    }
-                } else {
-                    value = control.value || '';
-                }
+            // Native and custom checkboxes/radios
+            if (control.type === 'checkbox' || tag === 'ds-checkbox') {
+                isCheckbox = true;
+                isChecked = control.checked === true || control.hasAttribute('checked');
+            } else if (control.type === 'radio' || tag === 'ds-radio') {
+                isRadio = true;
+                isChecked = control.checked === true || control.hasAttribute('checked');
             }
             
-            if (value !== '') {
+            if (isCheckbox || isRadio) {
+                if (isChecked) {
+                    // For custom elements, prefer getAttribute('value')
+                    if (tag.startsWith('ds-')) {
+                        value = control.getAttribute('value') ?? control.value ?? 'on';
+                    } else {
+                        value = control.value || 'on';
+                    }
+                    formData.append(name, value);
+                }
+                // If not checked, do not include in form data
+            } else {
+                // For text inputs, selects, textareas, and other custom components
+                value = control.value || '';
                 formData.append(name, value);
             }
         });
@@ -577,7 +575,7 @@ class DsForm extends BaseComponent {
         const formTitle = this.querySelector('h1, h2, h3, h4, h5, h6');
         
         if (!ariaLabel && !ariaLabelledBy && !formTitle) {
-            errors.push('Form should have an accessible name (aria-label, aria-labelledby, or heading)');
+            errors.push('Form should have an accessible name');
         }
         
         // Check for proper form structure

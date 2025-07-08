@@ -123,10 +123,18 @@ const DEFAULT_TOKENS = {
 function deepMerge(defaults, userTokens) {
     const result = { ...defaults };
     
+    // Handle invalid userTokens
+    if (!userTokens || typeof userTokens !== 'object' || Array.isArray(userTokens)) {
+        return result;
+    }
+    
     for (const key in userTokens) {
         if (userTokens.hasOwnProperty(key)) {
             if (typeof userTokens[key] === 'object' && userTokens[key] !== null && !Array.isArray(userTokens[key])) {
                 result[key] = deepMerge(defaults[key] || {}, userTokens[key]);
+            } else if (userTokens[key] === null || userTokens[key] === undefined) {
+                // Keep the default value for null/undefined
+                continue;
             } else {
                 result[key] = userTokens[key];
             }
@@ -145,34 +153,64 @@ function tokensToCSS(tokens) {
     const cssProperties = [];
     
     // Convert colors
-    for (const [key, value] of Object.entries(tokens.colors)) {
-        cssProperties.push(`--ds-color-${key}: ${value};`);
+    if (tokens.colors && typeof tokens.colors === 'object') {
+        for (const [key, value] of Object.entries(tokens.colors)) {
+            if (value !== null && value !== undefined) {
+                cssProperties.push(`--ds-color-${key}: ${value};`);
+            }
+        }
     }
     
     // Convert spacing
-    for (const [key, value] of Object.entries(tokens.spacing)) {
-        cssProperties.push(`--ds-spacing-${key}: ${value};`);
+    if (tokens.spacing && typeof tokens.spacing === 'object') {
+        for (const [key, value] of Object.entries(tokens.spacing)) {
+            if (value !== null && value !== undefined) {
+                cssProperties.push(`--ds-spacing-${key}: ${value};`);
+            }
+        }
     }
     
     // Convert typography
-    for (const [key, value] of Object.entries(tokens.typography)) {
-        cssProperties.push(`--ds-font-${key}: ${value};`);
+    if (tokens.typography && typeof tokens.typography === 'object') {
+        for (const [key, value] of Object.entries(tokens.typography)) {
+            if (value !== null && value !== undefined) {
+                // Convert camelCase to kebab-case for CSS properties
+                const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                // Remove duplicate "font-" prefix
+                const finalKey = cssKey.replace(/^font-/, '');
+                cssProperties.push(`--ds-font-${finalKey}: ${value};`);
+            }
+        }
     }
     
     // Convert forms
-    for (const [key, value] of Object.entries(tokens.forms)) {
-        cssProperties.push(`--ds-form-${key}: ${value};`);
+    if (tokens.forms && typeof tokens.forms === 'object') {
+        for (const [key, value] of Object.entries(tokens.forms)) {
+            if (value !== null && value !== undefined) {
+                cssProperties.push(`--ds-form-${key}: ${value};`);
+            }
+        }
     }
     
     // Convert layout
-    for (const [key, value] of Object.entries(tokens.layout)) {
-        cssProperties.push(`--ds-${key}: ${value};`);
+    if (tokens.layout && typeof tokens.layout === 'object') {
+        for (const [key, value] of Object.entries(tokens.layout)) {
+            if (value !== null && value !== undefined) {
+                cssProperties.push(`--ds-${key}: ${value};`);
+            }
+        }
     }
     
     // Convert component-specific tokens
-    for (const [component, config] of Object.entries(tokens.components)) {
-        for (const [key, value] of Object.entries(config)) {
-            cssProperties.push(`--ds-${component}-${key}: ${value};`);
+    if (tokens.components && typeof tokens.components === 'object') {
+        for (const [component, config] of Object.entries(tokens.components)) {
+            if (config && typeof config === 'object') {
+                for (const [key, value] of Object.entries(config)) {
+                    if (value !== null && value !== undefined) {
+                        cssProperties.push(`--ds-${component}-${key}: ${value};`);
+                    }
+                }
+            }
         }
     }
     
@@ -198,45 +236,41 @@ function injectCSS(css) {
 
 /**
  * Validates design tokens for required properties and correct types
- * @param {DesignTokens} tokens - Design tokens to validate
+ * @param {DesignTokens} userTokens - Design tokens to validate
  * @returns {Object} Validation result with isValid boolean and errors array
  */
-function validateTokens(tokens) {
+function validateTokens(userTokens) {
     const errors = [];
-    
     // Validate colors
-    if (tokens.colors) {
+    if (userTokens.colors && typeof userTokens.colors === 'object') {
         const requiredColors = ['primary', 'text', 'background'];
         for (const color of requiredColors) {
-            if (!tokens.colors[color]) {
+            if (!userTokens.colors.hasOwnProperty(color) || !userTokens.colors[color]) {
                 errors.push(`Missing required color: ${color}`);
             }
         }
-    } else {
+    } else if (userTokens.colors !== undefined) {
         errors.push('Missing colors configuration');
     }
-    
     // Validate spacing
-    if (tokens.spacing) {
+    if (userTokens.spacing && typeof userTokens.spacing === 'object') {
         const requiredSpacing = ['xs', 'sm', 'md', 'lg'];
         for (const space of requiredSpacing) {
-            if (!tokens.spacing[space]) {
+            if (!userTokens.spacing.hasOwnProperty(space) || !userTokens.spacing[space]) {
                 errors.push(`Missing required spacing: ${space}`);
             }
         }
-    } else {
+    } else if (userTokens.spacing !== undefined) {
         errors.push('Missing spacing configuration');
     }
-    
     // Validate typography
-    if (tokens.typography) {
-        if (!tokens.typography.fontFamily) {
+    if (userTokens.typography && typeof userTokens.typography === 'object') {
+        if (!userTokens.typography.hasOwnProperty('fontFamily') || !userTokens.typography.fontFamily) {
             errors.push('Missing required typography.fontFamily');
         }
-    } else {
+    } else if (userTokens.typography !== undefined) {
         errors.push('Missing typography configuration');
     }
-    
     return {
         isValid: errors.length === 0,
         errors
@@ -253,62 +287,58 @@ function validateTokens(tokens) {
  * @returns {Object} Initialization result
  */
 export function init(userTokens = {}, options = {}) {
-    const {
-        validate = true,
-        injectCSS: shouldInjectCSS = true,
-        console: shouldLog = true
-    } = options;
-    
+    const opts = {
+        injectCSS: true,
+        validate: false,
+        console: false,
+        ...options
+    };
+
     try {
-        // Merge user tokens with defaults
-        const tokens = deepMerge(DEFAULT_TOKENS, userTokens);
-        
-        // Validate tokens if requested
-        if (validate) {
-            const validation = validateTokens(tokens);
+        // If validation is requested, validate user tokens BEFORE merging
+        if (opts.validate) {
+            const validation = validateTokens(userTokens);
             if (!validation.isValid) {
-                const errorMessage = `Design system initialization failed:\n${validation.errors.join('\n')}`;
-                if (shouldLog) {
-                    console.error(errorMessage);
+                if (opts.console && typeof window !== 'undefined' && window.console) {
+                    console.error('❌ Design system token validation failed:', validation.errors);
                 }
-                return {
-                    success: false,
-                    errors: validation.errors,
-                    tokens: null
-                };
+                return { success: false, errors: validation.errors };
             }
         }
-        
+
+        // Merge user tokens with defaults
+        const mergedTokens = deepMerge(DEFAULT_TOKENS, userTokens);
+
         // Convert tokens to CSS
-        const css = tokensToCSS(tokens);
-        
+        const css = tokensToCSS(mergedTokens);
+
         // Inject CSS if requested and in browser environment
-        if (shouldInjectCSS && typeof document !== 'undefined') {
+        if (opts.injectCSS && typeof document !== 'undefined') {
             injectCSS(css);
         }
-        
+
         // Log success if requested
-        if (shouldLog) {
+        if (opts.console) {
             console.log('🎨 Design system initialized successfully');
-            console.log('📦 Tokens applied:', tokens);
+            console.log('📦 Tokens applied:', mergedTokens);
         }
-        
+
         return {
             success: true,
             errors: [],
-            tokens,
+            tokens: mergedTokens,
             css
         };
-        
     } catch (error) {
         const errorMessage = `Design system initialization failed: ${error.message}`;
-        if (shouldLog) {
+        if (opts.console) {
             console.error(errorMessage);
         }
         return {
             success: false,
-            errors: [error.message],
-            tokens: null
+            errors: [errorMessage],
+            tokens: null,
+            css: ''
         };
     }
 }
