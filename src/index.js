@@ -39,5 +39,8 @@ export { default as DsForm } from './components/ds-form.js';
 // Export the base component for custom component development
 export { default as BaseComponent } from './components/base-component.js';
 
+// Export initialization functions
+export { init, updateTokens, getCurrentTokens, resetTokens, DEFAULT_TOKENS } from './init.js';
+
 // Version info
 export const VERSION = '1.0.0'; 

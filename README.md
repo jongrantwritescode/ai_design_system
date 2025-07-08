@@ -11,6 +11,9 @@ A comprehensive design system built with native Web Components, featuring layout
 - **CSS Custom Properties**: Design tokens for consistent theming
 - **Flexbox Layout**: Responsive layout system with `ds-row` and `ds-col`
 - **Form Components**: Complete set of form elements with accessibility support
+- **Customizable Design Tokens**: Initialize with your own brand colors, spacing, and typography
+- **Theme Switching**: Dynamic theme switching with runtime token updates
+- **TypeScript Support**: Full TypeScript declarations for type safety
 - **Storybook Integration**: Interactive documentation and testing
 - **JSDoc Documentation**: Comprehensive API documentation
 - **No Dependencies**: Pure vanilla JavaScript implementation
@@ -23,6 +26,7 @@ A comprehensive design system built with native Web Components, featuring layout
 - `ds-col` - Flexbox column container with configurable growth and alignment
 
 ### Form Components
+- `ds-form` - Form container with validation and accessibility support
 - `ds-text-input` - Text input with support for various input types
 - `ds-button` - Button component with variants and types
 - `ds-radio` - Radio button for single selection within groups
@@ -36,35 +40,33 @@ A comprehensive design system built with native Web Components, featuring layout
 
 ## Installation
 
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd design-system-project
+npm install standards-ui
 ```
 
-2. Install dependencies:
-```bash
-npm install
+## Quick Start
+
+### 1. Initialize the Design System
+
+```javascript
+import { init } from 'standards-ui';
+
+// Initialize with default tokens
+init();
+
+// Or customize with your own tokens
+init({
+  colors: {
+    primary: '#your-brand-color',
+    secondary: '#your-secondary-color'
+  },
+  spacing: {
+    md: '20px'
+  }
+});
 ```
 
-3. Start the development server:
-```bash
-npm start
-```
-
-4. Open Storybook for interactive documentation:
-```bash
-npm run storybook
-```
-
-5. Generate and view JSDoc documentation:
-```bash
-npm run serve-docs
-```
-
-## Usage
-
-### Basic Setup
+### 2. Use Components
 
 Include the design system styles and components in your HTML:
 
