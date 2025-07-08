@@ -1,6 +1,6 @@
 {
   "name": "standards-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A foundational design system built with native Web Components",
   "main": "dist/standards-ui.js",
   "module": "dist/standards-ui.esm.js",
