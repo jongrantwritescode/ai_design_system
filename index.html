@@ -3,348 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design System - Web Components</title>
+    <title>Standards UI Design System</title>
     <link rel="stylesheet" href="src/styles/styles.css">
     <style>
         body {
-            font-family: var(--ds-font-family-body);
-            line-height: 1.6;
-            color: var(--ds-color-text);
-            background-color: var(--ds-color-background);
+            font-family: var(--ds-font-family-body, system-ui, sans-serif);
+            background: var(--ds-color-background, #f9f9f9);
+            color: var(--ds-color-text, #222);
             margin: 0;
             padding: 0;
         }
-        
-        .demo-section {
-            margin: 2rem 0;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-        }
-        
-        .demo-section h2 {
-            margin-top: 0;
-            color: var(--ds-color-primary);
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .form-row > * {
-            flex: 1;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .checkbox-group, .radio-group {
+        .center {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .checkbox-group label, .radio-group label {
-            display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            min-height: 80vh;
+        }
+        .links {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .ds-link-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 2rem 2.5rem;
+            min-width: 200px;
+            min-height: 120px;
+            text-decoration: none;
+            color: var(--ds-color-text, #222);
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .ds-link-card:hover {
+            border: 1px solid var(--ds-color-primary, #007bff);
+            box-shadow: 0 4px 16px rgba(0,123,255,0.08);
+        }
+        .ds-link-card h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.3rem;
+            color: var(--ds-color-primary, #007bff);
+        }
+        .ds-link-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #555;
+        }
+        footer {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.95rem;
+            margin: 2rem 0 1rem 0;
         }
     </style>
-</head>
-<body>
-    <!-- Import all components -->
+    <!-- Import design system components -->
     <script type="module" src="src/components/ds-page.js"></script>
     <script type="module" src="src/components/ds-row.js"></script>
     <script type="module" src="src/components/ds-col.js"></script>
-    <script type="module" src="src/components/ds-text-input.js"></script>
     <script type="module" src="src/components/ds-button.js"></script>
-    <script type="module" src="src/components/ds-radio.js"></script>
-    <script type="module" src="src/components/ds-checkbox.js"></script>
-    <script type="module" src="src/components/ds-textarea.js"></script>
-    <script type="module" src="src/components/ds-select.js"></script>
-    <script type="module" src="src/components/ds-option.js"></script>
-    <script type="module" src="src/components/ds-label.js"></script>
-    <script type="module" src="src/components/ds-fieldset.js"></script>
-    <script type="module" src="src/components/ds-legend.js"></script>
-
-    <ds-page>
-        <ds-row>
-            <ds-col>
-                <h1>Design System - Form Components Demo</h1>
-                <p>This page demonstrates all the form components in the design system.</p>
-            </ds-col>
-        </ds-row>
-
-        <!-- Text Inputs Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Text Inputs</h2>
-                    
-                    <div class="form-group">
-                        <ds-label for="name-input">Full Name</ds-label>
-                        <ds-text-input id="name-input" name="name" placeholder="Enter your full name" required></ds-text-input>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="email-input">Email Address</ds-label>
-                        <ds-text-input id="email-input" type="email" name="email" placeholder="Enter your email" required></ds-text-input>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="password-input">Password</ds-label>
-                        <ds-text-input id="password-input" type="password" name="password" placeholder="Enter your password" required></ds-text-input>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="phone-input">Phone Number</ds-label>
-                        <ds-text-input id="phone-input" type="tel" name="phone" placeholder="Enter your phone number"></ds-text-input>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="disabled-input">Disabled Input</ds-label>
-                        <ds-text-input id="disabled-input" name="disabled" value="This input is disabled" disabled></ds-text-input>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="readonly-input">Read-only Input</ds-label>
-                        <ds-text-input id="readonly-input" name="readonly" value="This input is read-only" readonly></ds-text-input>
-                    </div>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Buttons Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Buttons</h2>
-                    
-                    <div class="button-group">
-                        <ds-button type="button">Primary Button</ds-button>
-                        <ds-button type="submit">Submit Button</ds-button>
-                        <ds-button type="reset">Reset Button</ds-button>
-                        <ds-button disabled>Disabled Button</ds-button>
-                    </div>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Radio Buttons Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Radio Buttons</h2>
-                    
-                    <ds-fieldset>
-                        <ds-legend>Select your preferred contact method</ds-legend>
-                        <div class="radio-group">
-                            <ds-radio name="contact-method" value="email">Email</ds-radio>
-                            <ds-radio name="contact-method" value="phone" checked>Phone</ds-radio>
-                            <ds-radio name="contact-method" value="mail">Mail</ds-radio>
-                            <ds-radio name="contact-method" value="sms" disabled>SMS (Disabled)</ds-radio>
-                        </div>
-                    </ds-fieldset>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Checkboxes Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Checkboxes</h2>
-                    
-                    <ds-fieldset>
-                        <ds-legend>Select your interests</ds-legend>
-                        <div class="checkbox-group">
-                            <ds-checkbox name="interests" value="technology">Technology</ds-checkbox>
-                            <ds-checkbox name="interests" value="sports" checked>Sports</ds-checkbox>
-                            <ds-checkbox name="interests" value="music">Music</ds-checkbox>
-                            <ds-checkbox name="interests" value="travel">Travel</ds-checkbox>
-                            <ds-checkbox name="interests" value="cooking" disabled>Cooking (Disabled)</ds-checkbox>
-                        </div>
-                    </ds-fieldset>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Textarea Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Textarea</h2>
-                    
-                    <div class="form-group">
-                        <ds-label for="message-textarea">Message</ds-label>
-                        <ds-textarea id="message-textarea" name="message" placeholder="Enter your message here..." rows="4"></ds-textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="bio-textarea">Bio</ds-label>
-                        <ds-textarea id="bio-textarea" name="bio" placeholder="Tell us about yourself..." rows="6"></ds-textarea>
-                    </div>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Select Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Select Dropdowns</h2>
-                    
-                    <div class="form-group">
-                        <ds-label for="country-select">Country</ds-label>
-                        <ds-select id="country-select" name="country">
-                            <ds-option value="">Please select a country...</ds-option>
-                            <ds-option value="us">United States</ds-option>
-                            <ds-option value="ca" selected>Canada</ds-option>
-                            <ds-option value="uk">United Kingdom</ds-option>
-                            <ds-option value="au">Australia</ds-option>
-                            <ds-option value="de">Germany</ds-option>
-                            <ds-option value="fr">France</ds-option>
-                            <ds-option value="jp">Japan</ds-option>
-                        </ds-select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <ds-label for="colors-select">Favorite Colors (Multiple)</ds-label>
-                        <ds-select id="colors-select" name="colors" multiple size="4">
-                            <ds-option value="red">Red</ds-option>
-                            <ds-option value="green" selected>Green</ds-option>
-                            <ds-option value="blue" selected>Blue</ds-option>
-                            <ds-option value="yellow">Yellow</ds-option>
-                            <ds-option value="purple">Purple</ds-option>
-                            <ds-option value="orange">Orange</ds-option>
-                        </ds-select>
-                    </div>
-                </div>
-            </ds-col>
-        </ds-row>
-
-        <!-- Complete Form Demo -->
-        <ds-row>
-            <ds-col>
-                <div class="demo-section">
-                    <h2>Complete Registration Form</h2>
-                    
-                    <form id="registration-form">
-                        <ds-fieldset>
-                            <ds-legend>Personal Information</ds-legend>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <ds-label for="first-name">First Name</ds-label>
-                                    <ds-text-input id="first-name" name="firstName" required></ds-text-input>
-                                </div>
-                                <div class="form-group">
-                                    <ds-label for="last-name">Last Name</ds-label>
-                                    <ds-text-input id="last-name" name="lastName" required></ds-text-input>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <ds-label for="email-reg">Email Address</ds-label>
-                                <ds-text-input id="email-reg" type="email" name="email" required></ds-text-input>
-                            </div>
-                            
-                            <div class="form-group">
-                                <ds-label for="password-reg">Password</ds-label>
-                                <ds-text-input id="password-reg" type="password" name="password" required></ds-text-input>
-                            </div>
-                        </ds-fieldset>
-                        
-                        <ds-fieldset>
-                            <ds-legend>Preferences</ds-legend>
-                            
-                            <div class="form-group">
-                                <ds-label for="newsletter">Communication Preferences</ds-label>
-                                <div class="checkbox-group">
-                                    <ds-checkbox name="newsletter" value="email" checked>Email Newsletter</ds-checkbox>
-                                    <ds-checkbox name="newsletter" value="sms">SMS Updates</ds-checkbox>
-                                    <ds-checkbox name="newsletter" value="push">Push Notifications</ds-checkbox>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <ds-label>Account Type</ds-label>
-                                <div class="radio-group">
-                                    <ds-radio name="account-type" value="personal">Personal Account</ds-radio>
-                                    <ds-radio name="account-type" value="business" checked>Business Account</ds-radio>
-                                    <ds-radio name="account-type" value="enterprise">Enterprise Account</ds-radio>
-                                </div>
-                            </div>
-                        </ds-fieldset>
-                        
-                        <ds-fieldset>
-                            <ds-legend>Additional Information</ds-legend>
-                            
-                            <div class="form-group">
-                                <ds-label for="bio-reg">Bio</ds-label>
-                                <ds-textarea id="bio-reg" name="bio" placeholder="Tell us about yourself..." rows="4"></ds-textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <ds-label for="country-reg">Country</ds-label>
-                                <ds-select id="country-reg" name="country" required>
-                                    <ds-option value="">Select your country...</ds-option>
-                                    <ds-option value="us">United States</ds-option>
-                                    <ds-option value="ca">Canada</ds-option>
-                                    <ds-option value="uk">United Kingdom</ds-option>
-                                    <ds-option value="au">Australia</ds-option>
-                                </ds-select>
-                            </div>
-                        </ds-fieldset>
-                        
-                        <div class="button-group">
-                            <ds-button type="submit">Create Account</ds-button>
-                            <ds-button type="reset">Reset Form</ds-button>
-                            <ds-button type="button">Cancel</ds-button>
-                        </div>
-                    </form>
-                </div>
-            </ds-col>
-        </ds-row>
-    </ds-page>
-
-    <script>
-        // Add some basic form handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registration-form');
-            
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Form submitted!');
-                console.log('Form data:', new FormData(form));
-                alert('Form submitted! Check the console for form data.');
-            });
-            
-            // Add event listeners to demonstrate component functionality
-            const inputs = document.querySelectorAll('ds-text-input, ds-textarea, ds-select');
-            inputs.forEach(input => {
-                input.addEventListener('input', function(e) {
-                    console.log('Input changed:', e.target.tagName, e.target.value);
-                });
-            });
-            
-            const buttons = document.querySelectorAll('ds-button');
-            buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    console.log('Button clicked:', e.target.textContent);
-                });
-            });
-        });
-    </script>
+</head>
+<body>
+<ds-page>
+    <div class="center">
+        <h1>Standards UI Design System</h1>
+        <p style="max-width: 500px; text-align: center;">A modern, accessible web components design system. Explore the documentation, Storybook, and live examples below.</p>
+        <div class="links">
+            <a class="ds-link-card" href="storybook-static/" target="_blank" rel="noopener">
+                <h2>Storybook</h2>
+                <p>Interactive component explorer</p>
+            </a>
+            <a class="ds-link-card" href="docs-output/index.html" target="_blank" rel="noopener">
+                <h2>Docs</h2>
+                <p>API & usage documentation</p>
+            </a>
+            <a class="ds-link-card" href="examples/main.html" target="_blank" rel="noopener">
+                <h2>Examples</h2>
+                <p>Live code and UI demos</p>
+            </a>
+        </div>
+    </div>
+</ds-page>
+<footer>
+    &copy; <span id="year"></span> Standards UI &mdash; <a href="https://github.com/jongrantwritescode/ai_design_system" target="_blank" rel="noopener">GitHub</a>
+</footer>
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html> 

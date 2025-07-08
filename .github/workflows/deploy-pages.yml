@@ -1,55 +1,43 @@
 # Workflow name
-name: Deploy Storybook to GitHub Pages
+name: Deploy Site to GitHub Pages
 
 on:
-  # Event for the workflow to run on
   push:
     branches:
-      - 'main' # Replace with the branch you want to deploy from
+      - 'main'
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# List of jobs
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Manual Checkout
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      # Set up Node
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
-      # Install dependencies
       - name: Install dependencies
         run: npm ci
-      
-      # Build Storybook
       - name: Build Storybook
         run: npm run build-storybook
-      
-      # Prepare storybook for subdirectory deployment
-      - name: Prepare storybook for subdirectory
+      # Prepare site for deployment
+      - name: Prepare site for GitHub Pages
         run: |
-          # Create a directory for the storybook build
-          mkdir -p storybook-build/storybook
-          
-          # Copy storybook files to the storybook subdirectory
-          cp -r storybook-static/* storybook-build/storybook/
-      
-      # Upload build artifacts
+          mkdir -p site
+          cp index.html site/
+          cp -r docs-output site/
+          cp -r examples site/
+          cp -r storybook-static site/storybook
       - name: Upload build artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-build
+          path: site
 
   deploy:
     needs: build
