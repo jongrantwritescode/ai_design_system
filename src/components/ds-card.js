@@ -38,6 +38,7 @@ class DsCard extends HTMLElement {
   render() {
     const href = this.getAttribute('href');
     const isLink = !!href;
+    console.log(href);
     this.shadowRoot.innerHTML = `
       <style>
         .card-root {
