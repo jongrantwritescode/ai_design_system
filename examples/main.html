@@ -4,74 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design System Examples</title>
-    <link rel="stylesheet" href="node_modules/standards-ui/dist/styles.css">
+    <link rel="stylesheet" href="../src/styles/styles.css">
     <style>
-        body {
-            font-family: var(--ds-font-family-body);
-            line-height: 1.6;
-            color: var(--ds-color-text);
-            background-color: var(--ds-color-background);
+         body {
+            font-family: var(--ds-font-family-body, system-ui, sans-serif);
+            background: var(--ds-color-background, #f9f9f9);
+            color: var(--ds-color-text, #222);
             margin: 0;
             padding: 0;
         }
-        
-        .example-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 4px;
+        .center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
         }
-        
-        .example-description {
-            font-size: 0.9em;
-            color: var(--ds-color-secondary);
+        .links {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        
-        .example-link:hover .example-description {
-            color: rgba(255, 255, 255, 0.8);
+        .links ds-card {
+            width: 30%;
+            min-width: 260px;
+        }
+        footer {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.95rem;
+            margin: 2rem 0 1rem 0;
         }
     </style>
+    <!-- Import design system components -->
+    <script type="module" src="../src/components/ds-page.js"></script>
+    <script type="module" src="../src/components/ds-row.js"></script>
+    <script type="module" src="../src/components/ds-col.js"></script>
+    <script type="module" src="../src/components/ds-card.js"></script>
 </head>
 <body>
-    <!-- Import design system components -->
-    <script type="module" src="node_modules/standards-ui/dist/standards-ui.esm.js"></script>
-    <script type="module" src="../src/components/ds-card.js"></script>
-
     <ds-page>
-        <ds-row justify-content="center" style="margin: 48px 0;">
-            <ds-col flex-basis="800px">
-                <h1 style="text-align: center; color: var(--ds-color-primary); margin-bottom: 32px;">
-                    Design System Examples
-                </h1>
-                
-                <p style="text-align: center; font-size: 1.1em; margin-bottom: 48px; color: var(--ds-color-secondary);">
-                    Explore practical applications of our design system components in real-world scenarios.
-                </p>
-                
-                <ds-col gap="16px">
-                    <a href="login-signup-form/index.html" style="text-decoration:none;">
-                        <ds-card>
-                            <div class="example-title">Login / Sign Up Form</div>
-                            <div class="example-description">
-                                A dynamic form that switches between login and sign-up states with client-side validation, 
-                                demonstrating form components, state management, and user interaction patterns.
-                            </div>
-                        </ds-card>
-                    </a>
-                    <a href="custom-tokens/index.html" style="text-decoration:none;">
-                        <ds-card>
-                            <div class="example-title">Custom Design Tokens Example</div>
-                            <div class="example-description">
-                                Demonstrates initializing the design system with custom tokens, theme switching, and live token preview.
-                            </div>
-                        </ds-card>
-                    </a>
-                    <!-- Future examples can be added here -->
-                    <div style="text-align: center; padding: 32px; color: var(--ds-color-secondary); font-style: italic;">
-                        More examples coming soon...
-                    </div>
-                </ds-col>
-            </ds-col>
-        </ds-row>
+        <a href="../index.html" style="position: absolute; left: 24px; top: 24px; text-decoration: none; color: var(--ds-color-secondary, #666); font-size: 1rem; font-weight: 500; background: rgba(255,255,255,0.7); padding: 4px 12px; border-radius: 6px; z-index: 10; transition: background 0.2s;">
+            &larr; Home
+        </a>
+        <div class="center">
+            <h1>Design System Examples</h1>
+        <div class="subtitle">
+            Explore practical applications of our design system components in real-world scenarios.
+        </div>
+        <div class="links">
+            <ds-card href="./login-signup-form/index.html">
+                <h2>Login / Sign Up Form</h2>
+                <p>A dynamic form that switches between login and sign-up states with client-side validation, demonstrating form components, state management, and user interaction patterns.</p>
+            </ds-card>
+            <ds-card href="./custom-tokens/index.html">
+                <h2>Custom Design Tokens Example</h2>
+                <p>Demonstrates initializing the design system with custom tokens, theme switching, and live token preview.</p>
+            </ds-card>
+        </div>
+        <div class="coming-soon">
+            More examples coming soon...
+        </div>
+        </div>
     </ds-page>
+<footer>
+    &copy; <span id="year"></span> Standards UI &mdash; <a href="https://github.com/jongrantwritescode/ai_design_system" target="_blank" rel="noopener">GitHub</a>
+</footer>
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html> 
+
