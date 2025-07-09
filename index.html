@@ -26,36 +26,6 @@
             margin: 2rem 0;
             flex-wrap: wrap;
         }
-        .ds-link-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            padding: 2rem 2.5rem;
-            min-width: 200px;
-            min-height: 120px;
-            text-decoration: none;
-            color: var(--ds-color-text, #222);
-            transition: box-shadow 0.2s, border 0.2s;
-        }
-        .ds-link-card:hover {
-            border: 1px solid var(--ds-color-primary, #007bff);
-            box-shadow: 0 4px 16px rgba(0,123,255,0.08);
-        }
-        .ds-link-card h2 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.3rem;
-            color: var(--ds-color-primary, #007bff);
-        }
-        .ds-link-card p {
-            margin: 0;
-            font-size: 1rem;
-            color: #555;
-        }
         footer {
             text-align: center;
             color: #aaa;
@@ -68,6 +38,7 @@
     <script type="module" src="src/components/ds-row.js"></script>
     <script type="module" src="src/components/ds-col.js"></script>
     <script type="module" src="src/components/ds-button.js"></script>
+    <script type="module" src="src/components/ds-card.js"></script>
 </head>
 <body>
 <ds-page>
@@ -75,18 +46,18 @@
         <h1>Standards UI Design System</h1>
         <p style="max-width: 500px; text-align: center;">A modern, accessible web components design system. Explore the documentation, Storybook, and live examples below.</p>
         <div class="links">
-            <a class="ds-link-card" href="storybook-static/" target="_blank" rel="noopener">
+            <ds-card href="storybook-static/">
                 <h2>Storybook</h2>
                 <p>Interactive component explorer</p>
-            </a>
-            <a class="ds-link-card" href="docs-output/index.html" target="_blank" rel="noopener">
+            </ds-card>
+            <ds-card href="docs-output/index.html">
                 <h2>Docs</h2>
                 <p>API & usage documentation</p>
-            </a>
-            <a class="ds-link-card" href="examples/main.html" target="_blank" rel="noopener">
+            </ds-card>
+            <ds-card href="examples/main.html">
                 <h2>Examples</h2>
                 <p>Live code and UI demos</p>
-            </a>
+            </ds-card>
         </div>
     </div>
 </ds-page>

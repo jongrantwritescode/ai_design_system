@@ -1,6 +1,8 @@
 # Design System - Web Components
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Storybook-blue?style=flat-square)](https://jongrantwritescode.github.io/ai_design_system/storybook)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Site-blue?style=flat-square)](https://jongrantwritescode.github.io/ai_design_system/)
+
+**🌐 [View the Live Design System Site on GitHub Pages](https://jongrantwritescode.github.io/ai_design_system/)**
 
 A comprehensive design system built with native Web Components, featuring layout components and form elements with consistent styling and behavior.
 
@@ -97,10 +99,11 @@ Include the design system styles and components in your HTML:
 
 ## Documentation
 
+- **[Live Site (Landing Page)](https://jongrantwritescode.github.io/ai_design_system/)**: Main entry point for the design system
 - **[Storybook](https://jongrantwritescode.github.io/ai_design_system/storybook/)**: Interactive component documentation and testing
-- **[Examples](./examples/)**: Example implementations and use cases
-- **[JSDoc Documentation](./docs-output/)**: Comprehensive API documentation
-- **[Documentation](./docs/)**: Additional documentation in the docs folder
+- **[Examples](https://jongrantwritescode.github.io/ai_design_system/examples/main.html)**: Example implementations and use cases
+- **[JSDoc Documentation](https://jongrantwritescode.github.io/ai_design_system/docs-output/index.html)**: Comprehensive API documentation
+- **[Additional Markdown Docs](./docs/)**: Extra documentation (local repo only)
 
 ## Design Tokens
 

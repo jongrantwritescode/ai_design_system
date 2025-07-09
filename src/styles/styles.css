@@ -43,6 +43,12 @@
     --ds-form-input-padding: 8px 12px;
     --ds-form-border-radius: 4px;
     --ds-form-line-height: 1.5;
+
+    /* Card Colors */
+    --ds-card-border-color: #e0e0e0;
+    --ds-card-border-radius: 12px;
+    --ds-card-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    --ds-card-padding: 2rem 2.5rem;
 }
 
 /* Global base styles */
